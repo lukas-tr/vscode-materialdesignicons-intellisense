@@ -1,38 +1,66 @@
 {
-	"name": "materialdesignicons-intellisense",
-	"displayName": "materialdesignicons-intellisense",
-	"description": "Provides intellisense for Material Design Icons",
-	"version": "0.0.1",
-	"engines": {
-		"vscode": "^1.31.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onCommand:extension.helloWorld"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
-			}
-		]
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test"
-	},
-	"devDependencies": {
-		"typescript": "^3.3.1",
-		"vscode": "^1.1.28",
-		"tslint": "^5.12.1",
-		"@types/node": "^10.12.21",
-		"@types/mocha": "^2.2.42"
-	}
+    "name": "materialdesignicons-intellisense",
+    "displayName": "materialdesignicons-intellisense",
+    "description": "Provides intellisense for Material Design Icons",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.31.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "publisher": "lukas-tr",
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "configuration": [{
+            "title": "Material Design Icons Intellisense",
+            "properties": {
+                "materialdesigniconsIntellisense.iconColor": {
+                    "type": "string",
+                    "default": "#bababa",
+                    "pattern": "^#([0-9a-fA-F]{3}){1,2}$",
+                    "description": "RGB color of the icon in the completion and hover docs"
+                },
+                "materialdesigniconsIntellisense.iconSize": {
+                    "type": "integer",
+                    "default": 100,
+                    "minimum": 10,
+                    "description": "Size of the icon in the completion and hover docs in pixels"
+                },
+                "materialdesigniconsIntellisense.selector": {
+                    "type": "array",
+                    "default": ["javascript", "typescript", "javascriptreact", "typescriptreact", "html", "vue-pug", "vue-html", "vue", "ng-template"],
+                    "items": {
+                        "type": "string"
+                    },
+                    "uniqueItems": true,
+                    "description": "Defines the documents where completion and hover are active"
+                }
+            }
+        }],
+        "commands": [{
+            "command": "extension.show-mdi-version",
+            "title": "Show MDI Version"
+        }]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^3.3.1",
+        "vscode": "^1.1.28",
+        "tslint": "^5.12.1",
+        "@types/node": "^10.12.21",
+        "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "@mdi/svg": "^3.5.95"
+    }
 }
