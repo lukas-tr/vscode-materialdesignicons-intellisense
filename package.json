@@ -2,7 +2,7 @@
     "name": "materialdesignicons-intellisense",
     "displayName": "materialdesignicons-intellisense",
     "description": "Provides intellisense for Material Design Icons",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "engines": {
         "vscode": "^1.31.0"
     },
@@ -23,36 +23,50 @@
     ],
     "main": "./out/extension.js",
     "contributes": {
-        "configuration": [{
-            "title": "Material Design Icons Intellisense",
-            "properties": {
-                "materialdesigniconsIntellisense.iconColor": {
-                    "type": "string",
-                    "default": "#bababa",
-                    "pattern": "^#([0-9a-fA-F]{3}){1,2}$",
-                    "description": "RGB color of the icon in the completion and hover docs"
-                },
-                "materialdesigniconsIntellisense.iconSize": {
-                    "type": "integer",
-                    "default": 100,
-                    "minimum": 10,
-                    "description": "Size of the icon in the completion and hover docs in pixels"
-                },
-                "materialdesigniconsIntellisense.selector": {
-                    "type": "array",
-                    "default": ["javascript", "typescript", "javascriptreact", "typescriptreact", "html", "vue-pug", "vue-html", "vue", "ng-template"],
-                    "items": {
-                        "type": "string"
+        "configuration": [
+            {
+                "title": "Material Design Icons Intellisense",
+                "properties": {
+                    "materialdesigniconsIntellisense.iconColor": {
+                        "type": "string",
+                        "default": "#bababa",
+                        "pattern": "^#([0-9a-fA-F]{3}){1,2}$",
+                        "description": "RGB color of the icon in the completion and hover docs"
                     },
-                    "uniqueItems": true,
-                    "description": "Defines the documents where completion and hover are active"
+                    "materialdesigniconsIntellisense.iconSize": {
+                        "type": "integer",
+                        "default": 100,
+                        "minimum": 10,
+                        "description": "Size of the icon in the completion and hover docs in pixels"
+                    },
+                    "materialdesigniconsIntellisense.selector": {
+                        "type": "array",
+                        "default": [
+                            "javascript",
+                            "typescript",
+                            "javascriptreact",
+                            "typescriptreact",
+                            "html",
+                            "vue-pug",
+                            "vue-html",
+                            "vue",
+                            "ng-template"
+                        ],
+                        "items": {
+                            "type": "string"
+                        },
+                        "uniqueItems": true,
+                        "description": "Defines the documents where completion and hover are active"
+                    }
                 }
             }
-        }],
-        "commands": [{
-            "command": "extension.show-mdi-version",
-            "title": "Show MDI Version"
-        }]
+        ],
+        "commands": [
+            {
+                "command": "extension.show-mdi-version",
+                "title": "Show MDI Version"
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
