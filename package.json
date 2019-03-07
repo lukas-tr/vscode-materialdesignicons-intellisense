@@ -2,7 +2,7 @@
     "name": "materialdesignicons-intellisense",
     "displayName": "materialdesignicons-intellisense",
     "description": "Provides intellisense for Material Design Icons",
-    "version": "0.0.1",
+    "version": "0.0.0",
     "engines": {
         "vscode": "^1.31.0"
     },
@@ -10,6 +10,14 @@
         "Other"
     ],
     "publisher": "lukas-tr",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/lukas-tr/vscode-materialdesignicons-intellisense.git"
+    },
+    "keywords": [
+        "material-design",
+        "icons"
+    ],
     "activationEvents": [
         "*"
     ],

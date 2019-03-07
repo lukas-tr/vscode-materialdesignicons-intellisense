@@ -8,11 +8,11 @@ Starts suggesting icon names after typing `mdi-`. Each entry contains a preview 
 
 ### Intellisense
 
-![feature 1](doc/usage-1.gif)
+![feature 1](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-1.gif)
 
 ### Hover
 
-![feature 2](doc/usage-2.gif)
+![feature 2](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-2.gif)
 
 <!-- ## Requirements
 
