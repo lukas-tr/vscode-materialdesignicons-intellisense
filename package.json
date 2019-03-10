@@ -1,6 +1,6 @@
 {
     "name": "materialdesignicons-intellisense",
-    "displayName": "materialdesignicons-intellisense",
+    "displayName": "Material Design Icons Intellisense",
     "description": "Provides intellisense for Material Design Icons",
     "version": "0.0.1",
     "engines": {
@@ -23,48 +23,125 @@
     ],
     "main": "./out/extension.js",
     "contributes": {
-        "configuration": [
-            {
-                "title": "Material Design Icons Intellisense",
-                "properties": {
-                    "materialdesigniconsIntellisense.iconColor": {
-                        "type": "string",
-                        "default": "#bababa",
-                        "pattern": "^#([0-9a-fA-F]{3}){1,2}$",
-                        "description": "RGB color of the icon in the completion and hover docs"
+        "views": {
+            "explorer": [{
+                "id": "materialDesignIconsExplorer",
+                "name": "MDI Explorer"
+            }]
+        },
+        "menus": {
+            "view/title": [{
+                "command": "materialdesigniconsIntellisense.showIconSearch",
+                "when": "view == materialDesignIconsExplorer",
+                "group": "navigation"
+            }],
+            "view/item/context": [{
+                "command": "materialdesigniconsIntellisense.insertIconInActiveEditor",
+                "when": "view == materialDesignIconsExplorer && viewItem == mdiIcon",
+                "group": "inline"
+            }, {
+                "command": "materialdesigniconsIntellisense.closeSearch",
+                "when": "view == materialDesignIconsExplorer && viewItem == mdiSearch",
+                "group": "inline"
+            }]
+        },
+        "configuration": [{
+            "title": "Material Design Icons Intellisense",
+            "properties": {
+                "materialdesigniconsIntellisense.iconColor": {
+                    "type": "string",
+                    "default": "#bababa",
+                    "pattern": "^#([0-9a-fA-F]{3}){1,2}$",
+                    "description": "RGB color of the icon in the completion and hover docs"
+                },
+                "materialdesigniconsIntellisense.iconSize": {
+                    "type": "integer",
+                    "default": 100,
+                    "minimum": 10,
+                    "description": "Size of the icon in the completion and hover docs in pixels"
+                },
+                "materialdesigniconsIntellisense.selector": {
+                    "type": "array",
+                    "default": [
+                        "javascript",
+                        "typescript",
+                        "javascriptreact",
+                        "typescriptreact",
+                        "html",
+                        "vue-pug",
+                        "vue-html",
+                        "vue",
+                        "ng-template"
+                    ],
+                    "items": {
+                        "type": "string"
                     },
-                    "materialdesigniconsIntellisense.iconSize": {
-                        "type": "integer",
-                        "default": 100,
-                        "minimum": 10,
-                        "description": "Size of the icon in the completion and hover docs in pixels"
-                    },
-                    "materialdesigniconsIntellisense.selector": {
-                        "type": "array",
-                        "default": [
-                            "javascript",
-                            "typescript",
-                            "javascriptreact",
-                            "typescriptreact",
-                            "html",
-                            "vue-pug",
-                            "vue-html",
-                            "vue",
-                            "ng-template"
-                        ],
-                        "items": {
-                            "type": "string"
-                        },
-                        "uniqueItems": true,
-                        "description": "Defines the documents where completion and hover are active"
-                    }
+                    "uniqueItems": true,
+                    "description": "Defines the documents where completion and hover are active"
+                },
+                "materialdesigniconsIntellisense.insertPrefix": {
+                    "type": "string",
+                    "default": "mdi mdi-",
+                    "description": "Text inserted before the actual icon name"
+                },
+                "materialdesigniconsIntellisense.insertSuffix": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Text inserted after the actual icon name"
+                },
+                "materialdesigniconsIntellisense.includeAliases": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Also include icon aliases in completion items"
+                },
+                "materialdesigniconsIntellisense.overrideFontPackagePath": {
+                    "type": "string",
+                    "default": "",
+                    "markdownDescription": "Override the path to the `@mdi/svg` package. \nTo use a global installation, set this to `<global npm root>/@mdi/svg` where `<global npm root>` is the output of `npm root -g`"
                 }
             }
-        ],
-        "commands": [
+        }],
+        "commands": [{
+                "command": "materialdesigniconsIntellisense.showMdiVersion",
+                "title": "Show MDI Version",
+                "category": "MDI"
+            },
             {
-                "command": "extension.show-mdi-version",
-                "title": "Show MDI Version"
+                "command": "materialdesigniconsIntellisense.openIconPreview",
+                "title": "Open Icon Preview",
+                "category": "MDI"
+            },
+            {
+                "command": "materialdesigniconsIntellisense.showIconSearch",
+                "title": "Open Icon Search",
+                "icon": {
+                    "light": "icons/light/magnify.svg",
+                    "dark": "icons/dark/magnify.svg"
+                },
+                "category": "MDI"
+            },
+            {
+                "command": "materialdesigniconsIntellisense.performIconSearch",
+                "title": "Perform Icon Search",
+                "category": "MDI"
+            },
+            {
+                "command": "materialdesigniconsIntellisense.insertIconInActiveEditor",
+                "title": "Insert Icon In Editor",
+                "icon": {
+                    "light": "icons/light/content-paste.svg",
+                    "dark": "icons/dark/content-paste.svg"
+                },
+                "category": "MDI"
+            },
+            {
+                "command": "materialdesigniconsIntellisense.closeSearch",
+                "title": "Close Icon Search",
+                "icon": {
+                    "light": "icons/light/close.svg",
+                    "dark": "icons/dark/close.svg"
+                },
+                "category": "MDI"
             }
         ]
     },
