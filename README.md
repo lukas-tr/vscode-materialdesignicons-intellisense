@@ -61,3 +61,7 @@ Initial release of Material Design Icons Intellisense
   - `materialdesigniconsIntellisense.overrideFontPackagePath`
 - Added `MDI Explorer` view
 - Added icon lint
+
+### 1.0.1
+
+- Also use `materialdesigniconsIntellisense.insertPrefix` and `materialdesigniconsIntellisense.insertSuffix` for inserting from tree view instead of hardcoded prefix and suffix.

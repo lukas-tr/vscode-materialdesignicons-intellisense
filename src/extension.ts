@@ -52,7 +52,7 @@ export function activate(context: vscode.ExtensionContext) {
         if (node.type === "icon") {
           editor.insertSnippet(
             new vscode.SnippetString(
-              '<i class="mdi mdi-' + node.doc.name + '"></i>'
+              `${config.prefix}${node.doc.name}${config.suffix}`
             )
           );
         }
