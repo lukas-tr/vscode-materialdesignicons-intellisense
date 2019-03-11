@@ -1,4 +1,4 @@
-import { IIconMeta, IIconDoc } from "./types";
+import { IIconMeta, IIconDoc, CompletionType } from "./types";
 import { config } from "./configuration";
 import * as fs from "fs";
 import * as path from "path";
@@ -52,3 +52,20 @@ export const getIconData = (item: IIconMeta): Promise<IIconDoc> => {
     });
   });
 };
+
+export const createCompletion = (iconName: string, type?: CompletionType) => {
+  if (typeof type === "undefined") {
+    type = config.insertType;
+  }
+  return type === CompletionType.kebabCase
+    ? `mdi-${iconName}`
+    : kebabCaseToCamelCase(`mdi-${iconName}`);
+};
+
+export const kebabCaseToCamelCase = (kebabStr: string) =>
+  kebabStr.replace(/-([a-z0-9])/g, match => {
+    return match[1].toUpperCase();
+  });
+
+export const pascalCaseToKebabCase = (pascalStr: string) =>
+  pascalStr.replace(/([a-z])([A-Z0-9])/g, "$1-$2").toLowerCase();

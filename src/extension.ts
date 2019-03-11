@@ -7,6 +7,7 @@ import { HoverProvider } from "./hover";
 import { CompletionProvider } from "./completion";
 import { IconLint } from "./lint";
 import { showPreview } from "./preview";
+import { createCompletion } from "./util";
 
 export function activate(context: vscode.ExtensionContext) {
   const treeDataProvider = new IconTreeDataProvider();
@@ -52,7 +53,9 @@ export function activate(context: vscode.ExtensionContext) {
         if (node.type === "icon") {
           editor.insertSnippet(
             new vscode.SnippetString(
-              `${config.prefix}${node.doc.name}${config.suffix}`
+              `${config.prefix}${createCompletion(node.doc.name)}${
+                config.suffix
+              }`
             )
           );
         }
@@ -130,7 +133,8 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.languages.registerCompletionItemProvider(
       config.selector,
       new CompletionProvider(),
-      "-"
+      "-",
+      "i"
     )
   );
 

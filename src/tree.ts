@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { TreeNode, IIconMeta } from "./types";
 import * as path from "path";
 import { config } from "./configuration";
-import { getMdiMetaData, getIconData } from "./util";
+import { getMdiMetaData, getIconData, createCompletion } from "./util";
 
 export class IconTreeDataProvider
   implements
@@ -31,7 +31,7 @@ export class IconTreeDataProvider
           ? element.label
           : element.type === "tag"
           ? element.tag
-          : element.meta.name,
+          : createCompletion(element.meta.name),
       iconPath:
         element.type === "icon" &&
         path.normalize(

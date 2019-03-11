@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
-import { getMdiMetaData, getIconData } from "./util";
-import { IIconCompletionItem } from "./types";
+import { getMdiMetaData, getIconData, createCompletion } from "./util";
+import { IIconCompletionItem, CompletionType } from "./types";
 import { config } from "./configuration";
 
 export class CompletionProvider implements vscode.CompletionItemProvider {
@@ -11,25 +11,33 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
     let linePrefix = document
       .lineAt(position)
       .text.substr(0, position.character);
-    if (!linePrefix.endsWith("mdi-")) {
+    if (!linePrefix.match(/mdi-?$/)) {
       return [];
     }
+    const completionType = linePrefix.endsWith("mdi-")
+      ? CompletionType.kebabCase
+      : CompletionType.camelCase;
 
     const meta = await getMdiMetaData();
-    return [...meta].reduce<IIconCompletionItem[]>(
-      (prev, cur) =>
-        prev.concat(
-          [cur.name, ...(config.includeAliases ? cur.aliases : [])].map(
-            name => ({
-              label: `mdi-${name}`,
-              kind: vscode.CompletionItemKind.Text,
-              sortText: name,
-              meta: cur
-            })
-          )
-        ),
-      []
-    );
+
+    return {
+      incomplete: true,
+      items: meta.reduce<IIconCompletionItem[]>(
+        (prev, cur) =>
+          prev.concat(
+            [cur.name, ...(config.includeAliases ? cur.aliases : [])].map(
+              name => ({
+                label: createCompletion(name, completionType),
+                kind: vscode.CompletionItemKind.Text,
+                sortText: name,
+                meta: cur,
+                completionType
+              })
+            )
+          ),
+        []
+      )
+    };
   }
 
   resolveCompletionItem(
@@ -46,7 +54,10 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
 - author: ${data.author}
 - version: ${data.version}`),
         detail: data.tags,
-        insertText: `${config.prefix}${item.meta.name}${config.suffix}`
+        insertText: `${config.prefix}${createCompletion(
+          item.meta.name,
+          item.completionType
+        )}${config.suffix}`
       };
     });
   }

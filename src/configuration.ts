@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "path";
+import { CompletionType } from "./types";
 
 const searchCodeActionCode = Math.floor(Math.random() * 1000000);
 
@@ -39,6 +40,12 @@ export const config = {
   },
   get searchCodeActionCode() {
     return searchCodeActionCode;
+  },
+  get insertType() {
+    return (config.all.get<string>("insertStyle") || "kebabCase") ===
+      "kebabCase"
+      ? CompletionType.kebabCase
+      : CompletionType.camelCase;
   },
   lastSearch: ""
 };

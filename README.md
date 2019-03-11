@@ -2,9 +2,11 @@
 
 Provides intellisense, search and hover preview of Material Design Icons.
 
+This extension provides intellisense for both `@mdi/font` and `@mdi/js`. Due to the size of the webfont, you should consider using `@mdi/js` (read [this guide](https://dev.materialdesignicons.com/guide/webfont-alternatives) for further information).
+
 ## Features
 
-Starts suggesting icon names after typing `mdi-`. Each entry contains a preview image and other information related to the icon, such as the icon category or aliases.
+Starts suggesting icon names after typing `mdi` (camelCase) or `mdi-` (kebab-case). Each entry contains a preview image and other information related to the icon, such as the icon category or aliases.
 
 Unknown icon names are highlighted and listed in the Problems panel.
 
@@ -12,19 +14,23 @@ The explorer contains a list of all icons grouped by category. Icons can be filt
 
 ### Intellisense
 
-![feature 1](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-1.gif)
+![Intellisense](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-1.gif)
+
+### camelCase and kebab-case completion
+
+![camelCase and kebab-case completion](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-5.gif)
 
 ### Hover
 
-![feature 2](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-2.gif)
+![Hover](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-2.gif)
 
 ### Search
 
-![feature 3](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-3.gif)
+![Search](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-3.gif)
 
 ### Lint
 
-![feature 4](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-4.gif)
+![Lint](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-4.gif)
 
 <!-- ## Requirements
 
@@ -65,3 +71,9 @@ Initial release of Material Design Icons Intellisense
 ### 1.0.1
 
 - Also use `materialdesigniconsIntellisense.insertPrefix` and `materialdesigniconsIntellisense.insertSuffix` for inserting from tree view instead of hardcoded prefix and suffix.
+
+### 1.1.0
+
+- Added setting `materialdesigniconsIntellisense.insertStyle` to insert either kebab-case or camelCase icon names from tree view
+- Completion now works for both kebab-case and camelCase icon names
+- Hovering camelCase icon names also shows previews
