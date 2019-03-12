@@ -4,6 +4,8 @@ Provides intellisense, search and hover preview of Material Design Icons.
 
 This extension provides intellisense for both `@mdi/font` and `@mdi/js`. Due to the size of the webfont, you should consider using `@mdi/js` (read [this guide](https://dev.materialdesignicons.com/guide/webfont-alternatives) for further information).
 
+[Install from VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=lukas-tr.materialdesignicons-intellisense)
+
 ## Features
 
 Starts suggesting icon names after typing `mdi` (camelCase), `mdi-` (kebab-case) or `mdi:` (YAML/Home Assistant). Each entry contains a preview image and other information related to the icon, such as the icon category or aliases.
