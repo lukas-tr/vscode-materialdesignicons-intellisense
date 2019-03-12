@@ -57,9 +57,17 @@ export const createCompletion = (iconName: string, type?: CompletionType) => {
   if (typeof type === "undefined") {
     type = config.insertType;
   }
-  return type === CompletionType.kebabCase
-    ? `mdi-${iconName}`
-    : kebabCaseToCamelCase(`mdi-${iconName}`);
+  switch (type) {
+    case CompletionType.camelCase:
+      return kebabCaseToCamelCase(`mdi-${iconName}`);
+    case CompletionType.kebabCase:
+      return `mdi-${iconName}`;
+    case CompletionType.homeAssistant:
+      return `mdi:${iconName}`;
+    default:
+      assertNever(type);
+      return `mdi-${iconName}`;
+  }
 };
 
 export const kebabCaseToCamelCase = (kebabStr: string) =>
@@ -69,3 +77,12 @@ export const kebabCaseToCamelCase = (kebabStr: string) =>
 
 export const pascalCaseToKebabCase = (pascalStr: string) =>
   pascalStr.replace(/([a-z])([A-Z0-9])/g, "$1-$2").toLowerCase();
+
+export const assertNever = (x: never) => {
+  const channel = vscode.window.createOutputChannel(
+    "Material Design Icons Intellisense"
+  );
+  channel.show();
+  const msg = `Unexpected object: ${JSON.stringify(x)}\n`;
+  channel.appendLine(msg);
+};

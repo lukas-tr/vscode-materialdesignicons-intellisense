@@ -3,7 +3,7 @@ import { getMdiMetaData, getIconData, pascalCaseToKebabCase } from "./util";
 
 export class HoverProvider implements vscode.HoverProvider {
   async provideHover(document: vscode.TextDocument, position: vscode.Position) {
-    const regex = /mdi((\w+)|-((\w|\-)+))/i;
+    const regex = /mdi((\w+)|(-|:)((\w|\-)+))/i;
     const range = document.getWordRangeAtPosition(position, regex);
     if (!range) {
       return null;
@@ -14,7 +14,7 @@ export class HoverProvider implements vscode.HoverProvider {
     if (!match) {
       return null;
     }
-    const iconName = match[3] || pascalCaseToKebabCase(match[2]);
+    const iconName = match[4] || pascalCaseToKebabCase(match[2]);
 
     const meta = await getMdiMetaData();
 

@@ -6,19 +6,19 @@ This extension provides intellisense for both `@mdi/font` and `@mdi/js`. Due to 
 
 ## Features
 
-Starts suggesting icon names after typing `mdi` (camelCase) or `mdi-` (kebab-case). Each entry contains a preview image and other information related to the icon, such as the icon category or aliases.
+Starts suggesting icon names after typing `mdi` (camelCase), `mdi-` (kebab-case) or `mdi:` (YAML/Home Assistant). Each entry contains a preview image and other information related to the icon, such as the icon category or aliases.
 
-Unknown icon names are highlighted and listed in the Problems panel.
+Unknown icon names are highlighted and listed in the Problems panel - kebab-case and Home Assistant only (use tslint/eslint for `@mdi/js`).
 
-The explorer contains a list of all icons grouped by category. Icons can be filtered using the magnifier icon.
+The explorer contains a list of all icons grouped by category. Icons can be filtered using the magnifier icon. You can use the `materialdesigniconsIntellisense.insertStyle` setting to change the syntax of the inserted snippet.
 
 ### Intellisense
 
 ![Intellisense](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-1.gif)
 
-### camelCase and kebab-case completion
+### camelCase, kebab-case and Home Assistant completion
 
-![camelCase and kebab-case completion](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-5.gif)
+![camelCase and kebab-case completion](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-6.gif)
 
 ### Hover
 
@@ -77,3 +77,13 @@ Initial release of Material Design Icons Intellisense
 - Added setting `materialdesigniconsIntellisense.insertStyle` to insert either kebab-case or camelCase icon names from tree view
 - Completion now works for both kebab-case and camelCase icon names
 - Hovering camelCase icon names also shows previews
+
+### 1.2.0
+
+- Add `homeAssistant` to `materialdesigniconsIntellisense.insertStyle`
+- Provide completions for Home Assistant icon names
+- Provide lint for Home Assistant icon names
+- Provide hover preview for Home Assistant icon names
+- Suggest completions when pressing <kbd>ctrl</kbd> + <kbd>space</kbd> even when the last character is not `i`, `-` or `:`
+- Delete already existing text after inserting snippet (previously, typing `mdi-acc` + <kbd>enter</kbd> would result in `mdi-mdi-account` in `.js` files, now results in `mdi-account`)
+- Set `materialdesigniconsIntellisense.insertPrefix`'s default value to `""`

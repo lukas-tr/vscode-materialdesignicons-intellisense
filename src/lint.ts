@@ -3,7 +3,7 @@ import { getMdiMetaData } from "./util";
 import { config } from "./configuration";
 
 export class IconLint implements vscode.CodeActionProvider {
-  static lintIconRegex = /\bmdi-((\w|\-)+)\b/gi;
+  static lintIconRegex = /\bmdi(-|:)((\w|\-)+)\b/gi;
 
   diagnosticCollection: vscode.DiagnosticCollection;
 
@@ -33,7 +33,7 @@ export class IconLint implements vscode.CodeActionProvider {
       while ((match = IconLint.lintIconRegex.exec(line.text))) {
         const index = match.index;
         const length = match[0].length;
-        const iconName = match[1];
+        const iconName = match[2];
         let iconExists = false;
 
         for (const item of meta) {
@@ -76,7 +76,7 @@ export class IconLint implements vscode.CodeActionProvider {
       .map(
         (d): vscode.Command => {
           const match = IconLint.lintIconRegex.exec(d.message);
-          const iconName = (match && match[1]) || "";
+          const iconName = (match && match[2]) || "";
           return {
             title: "Search icon",
             command: "materialdesigniconsIntellisense.performIconSearch",

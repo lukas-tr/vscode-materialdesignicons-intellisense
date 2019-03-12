@@ -11,11 +11,15 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
     let linePrefix = document
       .lineAt(position)
       .text.substr(0, position.character);
-    if (!linePrefix.match(/mdi-?$/)) {
+    const match = linePrefix.match(/mdi(-)?(:)?([-\w]+?)?$/);
+    if (!match) {
       return [];
     }
-    const completionType = linePrefix.endsWith("mdi-")
+
+    const completionType = match[1]
       ? CompletionType.kebabCase
+      : match[2]
+      ? CompletionType.homeAssistant
       : CompletionType.camelCase;
 
     const meta = await getMdiMetaData();
@@ -26,12 +30,22 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         (prev, cur) =>
           prev.concat(
             [cur.name, ...(config.includeAliases ? cur.aliases : [])].map(
-              name => ({
+              (name): IIconCompletionItem => ({
                 label: createCompletion(name, completionType),
                 kind: vscode.CompletionItemKind.Text,
                 sortText: name,
                 meta: cur,
-                completionType
+                completionType,
+                additionalTextEdits: [
+                  vscode.TextEdit.delete(
+                    new vscode.Range(
+                      position.line,
+                      position.character - match[0].length,
+                      position.line,
+                      position.character
+                    )
+                  )
+                ]
               })
             )
           ),

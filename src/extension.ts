@@ -134,7 +134,8 @@ export function activate(context: vscode.ExtensionContext) {
       config.selector,
       new CompletionProvider(),
       "-",
-      "i"
+      "i",
+      ":"
     )
   );
 

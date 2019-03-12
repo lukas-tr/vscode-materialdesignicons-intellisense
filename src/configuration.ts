@@ -42,10 +42,15 @@ export const config = {
     return searchCodeActionCode;
   },
   get insertType() {
-    return (config.all.get<string>("insertStyle") || "kebabCase") ===
-      "kebabCase"
-      ? CompletionType.kebabCase
-      : CompletionType.camelCase;
+    switch (config.all.get<string>("insertStyle")) {
+      case "camelCase":
+        return CompletionType.camelCase;
+      case "homeAssistant":
+        return CompletionType.homeAssistant;
+      case "kebabCase":
+      default:
+        return CompletionType.kebabCase;
+    }
   },
   lastSearch: ""
 };
