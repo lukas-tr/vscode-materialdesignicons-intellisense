@@ -22,7 +22,7 @@
     "icon": "icons/logo.png",
     "galleryBanner": {
         "color": "#0091EA",
-        "theme": "light"
+        "theme": "dark"
     },
     "activationEvents": [
         "*"

@@ -93,3 +93,7 @@ Initial release of Material Design Icons Intellisense
 ### 1.2.1
 
 - Add a logo
+
+### 1.2.2
+
+- Update theme and logo
