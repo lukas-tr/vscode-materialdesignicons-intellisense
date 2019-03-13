@@ -2,7 +2,7 @@
     "name": "materialdesignicons-intellisense",
     "displayName": "Material Design Icons Intellisense",
     "description": "Provides intellisense for Material Design Icons",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "engines": {
         "vscode": "^1.31.0"
     },
@@ -21,8 +21,8 @@
     ],
     "icon": "icons/logo.png",
     "galleryBanner": {
-      "color": "#0091EA",
-      "theme": "light"
+        "color": "#0091EA",
+        "theme": "light"
     },
     "activationEvents": [
         "*"
