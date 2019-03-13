@@ -16,8 +16,14 @@
     },
     "keywords": [
         "material-design",
-        "icons"
+        "icons",
+        "mdi"
     ],
+    "icon": "icons/logo.png",
+    "galleryBanner": {
+      "color": "#0091EA",
+      "theme": "light"
+    },
     "activationEvents": [
         "*"
     ],

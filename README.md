@@ -89,3 +89,7 @@ Initial release of Material Design Icons Intellisense
 - Suggest completions when pressing <kbd>ctrl</kbd> + <kbd>space</kbd> even when the last character is not `i`, `-` or `:`
 - Delete already existing text after inserting snippet (previously, typing `mdi-acc` + <kbd>enter</kbd> would result in `mdi-mdi-account` in `.js` files, now results in `mdi-account`)
 - Set `materialdesigniconsIntellisense.insertPrefix`'s default value to `""`
+
+### 1.2.1
+
+- Add a logo
