@@ -24,6 +24,22 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
 
     const meta = await getMdiMetaData();
 
+    const additionalTextEdits =
+      config
+        .insertTypeSpecificConfig(completionType)
+        .noTextDeletionLanguages.indexOf(document.languageId) === -1
+        ? [
+            vscode.TextEdit.delete(
+              new vscode.Range(
+                position.line,
+                position.character - match[0].length,
+                position.line,
+                position.character
+              )
+            )
+          ]
+        : [];
+
     return {
       incomplete: true,
       items: meta.reduce<IIconCompletionItem[]>(
@@ -36,16 +52,7 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
                 sortText: name,
                 meta: cur,
                 completionType,
-                additionalTextEdits: [
-                  vscode.TextEdit.delete(
-                    new vscode.Range(
-                      position.line,
-                      position.character - match[0].length,
-                      position.line,
-                      position.character
-                    )
-                  )
-                ]
+                additionalTextEdits
               })
             )
           ),

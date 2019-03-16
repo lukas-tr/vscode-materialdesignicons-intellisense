@@ -47,7 +47,7 @@ export interface IIconCompletionItem extends vscode.CompletionItem {
 }
 
 export enum CompletionType {
-  kebabCase,
-  camelCase,
-  homeAssistant
+  kebabCase = "kebabCase",
+  camelCase = "camelCase",
+  homeAssistant = "homeAssistant"
 }
