@@ -2,7 +2,7 @@
     "name": "materialdesignicons-intellisense",
     "displayName": "Material Design Icons Intellisense",
     "description": "Provides intellisense for Material Design Icons",
-    "version": "1.2.2",
+    "version": "1.3.0",
     "engines": {
         "vscode": "^1.31.0"
     },
@@ -30,18 +30,23 @@
     "main": "./out/extension.js",
     "contributes": {
         "views": {
-            "explorer": [{
-                "id": "materialDesignIconsExplorer",
-                "name": "MDI Explorer"
-            }]
+            "explorer": [
+                {
+                    "id": "materialDesignIconsExplorer",
+                    "name": "MDI Explorer"
+                }
+            ]
         },
         "menus": {
-            "view/title": [{
-                "command": "materialdesigniconsIntellisense.showIconSearch",
-                "when": "view == materialDesignIconsExplorer",
-                "group": "navigation"
-            }],
-            "view/item/context": [{
+            "view/title": [
+                {
+                    "command": "materialdesigniconsIntellisense.showIconSearch",
+                    "when": "view == materialDesignIconsExplorer",
+                    "group": "navigation"
+                }
+            ],
+            "view/item/context": [
+                {
                     "command": "materialdesigniconsIntellisense.insertIconInActiveEditor",
                     "when": "view == materialDesignIconsExplorer && viewItem == mdiIcon",
                     "group": "inline"
@@ -53,106 +58,109 @@
                 }
             ]
         },
-        "configuration": [{
-            "title": "Material Design Icons Intellisense",
-            "properties": {
-                "materialdesigniconsIntellisense.iconColor": {
-                    "type": "string",
-                    "default": "#bababa",
-                    "pattern": "^#([0-9a-fA-F]{3}){1,2}$",
-                    "description": "RGB color of the icon in the completion and hover docs"
-                },
-                "materialdesigniconsIntellisense.iconSize": {
-                    "type": "integer",
-                    "default": 100,
-                    "minimum": 10,
-                    "description": "Size of the icon in the completion and hover docs in pixels"
-                },
-                "materialdesigniconsIntellisense.selector": {
-                    "type": "array",
-                    "default": [
-                        "javascript",
-                        "typescript",
-                        "javascriptreact",
-                        "typescriptreact",
-                        "html",
-                        "vue-pug",
-                        "vue-html",
-                        "vue",
-                        "ng-template",
-                        "yaml"
-                    ],
-                    "items": {
-                        "type": "string"
+        "configuration": [
+            {
+                "title": "Material Design Icons Intellisense",
+                "properties": {
+                    "materialdesigniconsIntellisense.iconColor": {
+                        "type": "string",
+                        "default": "#bababa",
+                        "pattern": "^#([0-9a-fA-F]{3}){1,2}$",
+                        "description": "RGB color of the icon in the completion and hover docs"
                     },
-                    "uniqueItems": true,
-                    "description": "Defines the documents where completion and hover are active"
-                },
-                "materialdesigniconsIntellisense.insertPrefix": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Text inserted before the actual icon name"
-                },
-                "materialdesigniconsIntellisense.insertSuffix": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Text inserted after the actual icon name"
-                },
-                "materialdesigniconsIntellisense.includeAliases": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Also include icon aliases in completion items"
-                },
-                "materialdesigniconsIntellisense.overrideFontPackagePath": {
-                    "type": "string",
-                    "default": "",
-                    "markdownDescription": "Override the path to the `@mdi/svg` package. \nTo use a global installation, set this to `<global npm root>/@mdi/svg` where `<global npm root>` is the output of `npm root -g`"
-                },
-                "materialdesigniconsIntellisense.insertStyle": {
-                    "type": "string",
-                    "enum": [
-                        "kebabCase",
-                        "camelCase",
-                        "homeAssistant"
-                    ],
-                    "default": "kebabCase",
-                    "markdownDescription": "Insert icons from the tree view in kebab case (if you use `@mdi/font`, eg `mdi-account`) or camel case (if you use `@mdi/js`, eg `mdiAccount`). You might also want to change `insertPrefix` and `insertSuffix`."
-                },
-                "materialdesigniconsIntellisense.kebabCase.noTextDeletionLanguages": {
-                    "type": "array",
-                    "default": [],
-                    "items": {
-                        "type": "string"
+                    "materialdesigniconsIntellisense.iconSize": {
+                        "type": "integer",
+                        "default": 100,
+                        "minimum": 10,
+                        "description": "Size of the icon in the completion and hover docs in pixels"
                     },
-                    "uniqueItems": true,
-                    "markdownDescription": "Already typed text won't be inserted for these langauges. A list of identifiers can be found [here](https://code.visualstudio.com/docs/languages/identifiers) or when executing the `Change Language Mode` command."
-                },
-                "materialdesigniconsIntellisense.camelCase.noTextDeletionLanguages": {
-                    "type": "array",
-                    "default": [
-                        "javascript",
-                        "typescript",
-                        "javascriptreact",
-                        "typescriptreact"
-                    ],
-                    "items": {
-                        "type": "string"
+                    "materialdesigniconsIntellisense.selector": {
+                        "type": "array",
+                        "default": [
+                            "javascript",
+                            "typescript",
+                            "javascriptreact",
+                            "typescriptreact",
+                            "html",
+                            "vue-pug",
+                            "vue-html",
+                            "vue",
+                            "ng-template",
+                            "yaml"
+                        ],
+                        "items": {
+                            "type": "string"
+                        },
+                        "uniqueItems": true,
+                        "description": "Defines the documents where completion and hover are active"
                     },
-                    "uniqueItems": true,
-                    "markdownDescription": "Already typed text won't be inserted for these langauges. A list of identifiers can be found [here](https://code.visualstudio.com/docs/languages/identifiers) or when executing the `Change Language Mode` command."
-                },
-                "materialdesigniconsIntellisense.homeAssistant.noTextDeletionLanguages": {
-                    "type": "array",
-                    "default": [],
-                    "items": {
-                        "type": "string"
+                    "materialdesigniconsIntellisense.insertPrefix": {
+                        "type": "string",
+                        "default": "",
+                        "description": "Text inserted before the actual icon name"
                     },
-                    "uniqueItems": true,
-                    "markdownDescription": "Already typed text won't be inserted for these langauges. A list of identifiers can be found [here](https://code.visualstudio.com/docs/languages/identifiers) or when executing the `Change Language Mode` command."
+                    "materialdesigniconsIntellisense.insertSuffix": {
+                        "type": "string",
+                        "default": "",
+                        "description": "Text inserted after the actual icon name"
+                    },
+                    "materialdesigniconsIntellisense.includeAliases": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Also include icon aliases in completion items"
+                    },
+                    "materialdesigniconsIntellisense.overrideFontPackagePath": {
+                        "type": "string",
+                        "default": "",
+                        "markdownDescription": "Override the path to the `@mdi/svg` package. \nTo use a global installation, set this to `<global npm root>/@mdi/svg` where `<global npm root>` is the output of `npm root -g`"
+                    },
+                    "materialdesigniconsIntellisense.insertStyle": {
+                        "type": "string",
+                        "enum": [
+                            "kebabCase",
+                            "camelCase",
+                            "homeAssistant"
+                        ],
+                        "default": "kebabCase",
+                        "markdownDescription": "Insert icons from the tree view in kebab case (if you use `@mdi/font`, eg `mdi-account`) or camel case (if you use `@mdi/js`, eg `mdiAccount`). You might also want to change `insertPrefix` and `insertSuffix`."
+                    },
+                    "materialdesigniconsIntellisense.kebabCase.noTextDeletionLanguages": {
+                        "type": "array",
+                        "default": [],
+                        "items": {
+                            "type": "string"
+                        },
+                        "uniqueItems": true,
+                        "markdownDescription": "Already typed text won't be inserted for these langauges. A list of identifiers can be found [here](https://code.visualstudio.com/docs/languages/identifiers) or when executing the `Change Language Mode` command."
+                    },
+                    "materialdesigniconsIntellisense.camelCase.noTextDeletionLanguages": {
+                        "type": "array",
+                        "default": [
+                            "javascript",
+                            "typescript",
+                            "javascriptreact",
+                            "typescriptreact"
+                        ],
+                        "items": {
+                            "type": "string"
+                        },
+                        "uniqueItems": true,
+                        "markdownDescription": "Already typed text won't be inserted for these langauges. A list of identifiers can be found [here](https://code.visualstudio.com/docs/languages/identifiers) or when executing the `Change Language Mode` command."
+                    },
+                    "materialdesigniconsIntellisense.homeAssistant.noTextDeletionLanguages": {
+                        "type": "array",
+                        "default": [],
+                        "items": {
+                            "type": "string"
+                        },
+                        "uniqueItems": true,
+                        "markdownDescription": "Already typed text won't be inserted for these langauges. A list of identifiers can be found [here](https://code.visualstudio.com/docs/languages/identifiers) or when executing the `Change Language Mode` command."
+                    }
                 }
             }
-        }],
-        "commands": [{
+        ],
+        "commands": [
+            {
                 "command": "materialdesigniconsIntellisense.showMdiVersion",
                 "title": "Show MDI Version",
                 "category": "MDI"
