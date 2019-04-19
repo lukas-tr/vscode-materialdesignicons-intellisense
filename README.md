@@ -109,3 +109,7 @@ Initial release of Material Design Icons Intellisense
   - `materialdesigniconsIntellisense.kebabCase.noTextDeletionLanguages`
   - `materialdesigniconsIntellisense.camelCase.noTextDeletionLanguages`
   - `materialdesigniconsIntellisense.homeAssistant.noTextDeletionLanguages`
+
+### 1.3.1
+
+- Updated dependencies
