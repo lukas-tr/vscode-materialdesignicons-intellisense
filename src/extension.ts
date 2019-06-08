@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
-import { TreeNode } from "./types";
+import { TreeNode, CompletionType } from "./types";
 import { config } from "./configuration";
 import { IconTreeDataProvider } from "./tree";
 import { HoverProvider } from "./hover";
@@ -100,6 +100,25 @@ export function activate(context: vscode.ExtensionContext) {
           "materialdesigniconsIntellisense.performIconSearch",
           search
         );
+      }
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "materialdesigniconsIntellisense.changeInsertStyle",
+      async () => {
+        const result = (await vscode.window.showQuickPick(
+          ["kebabCase", "camelCase", "homeAssistant"].filter(t => t !== config.insertType),
+          {
+            canPickMany: false,
+            placeHolder: `Currently Selected: ${config.insertType}`
+          }
+        )) as CompletionType | undefined;
+        if (result) {
+          await config.changeInsertType(result);
+          treeDataProvider.refresh();
+        }
       }
     )
   );

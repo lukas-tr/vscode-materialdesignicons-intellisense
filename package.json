@@ -43,6 +43,11 @@
                     "command": "materialdesigniconsIntellisense.showIconSearch",
                     "when": "view == materialDesignIconsExplorer",
                     "group": "navigation"
+                },
+                {
+                    "command": "materialdesigniconsIntellisense.changeInsertStyle",
+                    "when": "view == materialDesignIconsExplorer",
+                    "group": "navigation"
                 }
             ],
             "view/item/context": [
@@ -167,8 +172,7 @@
             },
             {
                 "command": "materialdesigniconsIntellisense.openIconPreview",
-                "title": "Open Icon Preview",
-                "category": "MDI"
+                "when": false
             },
             {
                 "command": "materialdesigniconsIntellisense.showIconSearch",
@@ -180,9 +184,17 @@
                 "category": "MDI"
             },
             {
-                "command": "materialdesigniconsIntellisense.performIconSearch",
-                "title": "Perform Icon Search",
+                "command": "materialdesigniconsIntellisense.changeInsertStyle",
+                "title": "Change Insert Style",
+                "icon": {
+                    "light": "icons/light/toggle-switch.svg",
+                    "dark": "icons/dark/toggle-switch.svg"
+                },
                 "category": "MDI"
+            },
+            {
+                "command": "materialdesigniconsIntellisense.performIconSearch",
+                "when": false
             },
             {
                 "command": "materialdesigniconsIntellisense.insertIconInActiveEditor",

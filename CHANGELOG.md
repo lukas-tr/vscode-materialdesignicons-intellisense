@@ -60,3 +60,8 @@ Initial release of Material Design Icons Intellisense
 ## 1.3.2
 
 - Updated dependencies
+
+## 1.4.0
+
+- Hide `materialdesigniconsIntellisense.performIconSearch` and `materialdesigniconsIntellisense.openIconPreview` from the command palette
+- Add `materialdesigniconsIntellisense.changeInsertStyle` command

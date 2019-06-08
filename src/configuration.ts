@@ -47,5 +47,12 @@ export const config = {
   insertTypeSpecificConfig(type: CompletionType) {
     return config.all.get<{ noTextDeletionLanguages: string[] }>(type)!;
   },
-  lastSearch: ""
+  lastSearch: "",
+  changeInsertType(newType: CompletionType) {
+    return config.all.update(
+      "insertStyle",
+      newType,
+      vscode.ConfigurationTarget.Global
+    );
+  }
 };
