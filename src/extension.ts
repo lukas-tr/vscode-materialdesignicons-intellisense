@@ -109,7 +109,9 @@ export function activate(context: vscode.ExtensionContext) {
       "materialdesigniconsIntellisense.changeInsertStyle",
       async () => {
         const result = (await vscode.window.showQuickPick(
-          ["kebabCase", "camelCase", "homeAssistant"].filter(t => t !== config.insertType),
+          ["kebabCase", "camelCase", "homeAssistant"].filter(
+            t => t !== config.insertType
+          ),
           {
             canPickMany: false,
             placeHolder: `Currently Selected: ${config.insertType}`
@@ -158,31 +160,48 @@ export function activate(context: vscode.ExtensionContext) {
     )
   );
 
-  const linter = new IconLint();
+  const enableLinter = () => {
+    const linter = new IconLint();
 
-  if (vscode.window.activeTextEditor) {
-    linter.lintDocument(vscode.window.activeTextEditor.document);
+    if (vscode.window.activeTextEditor) {
+      linter.lintDocument(vscode.window.activeTextEditor.document);
+    }
+
+    const disposables = vscode.Disposable.from(
+      vscode.workspace.onDidOpenTextDocument(linter.lintDocument, null),
+      vscode.workspace.onDidCloseTextDocument(linter.deleteDiagnostics, null),
+      vscode.workspace.onDidCloseTextDocument(linter.deleteDiagnostics, null),
+      vscode.workspace.onDidSaveTextDocument(linter.lintDocument, null),
+      vscode.languages.registerCodeActionsProvider(config.selector, linter),
+      linter
+    );
+    context.subscriptions.push(disposables);
+    return disposables;
+  };
+
+  let linterDisposables: vscode.Disposable | undefined;
+
+  if (config.enableLinter) {
+    linterDisposables = enableLinter();
   }
 
-  vscode.workspace.onDidOpenTextDocument(
-    linter.lintDocument,
-    null,
-    context.subscriptions
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration(event => {
+      if (
+        event.affectsConfiguration(
+          "materialdesigniconsIntellisense.enableLinter"
+        )
+      ) {
+        if (linterDisposables) {
+          linterDisposables.dispose();
+          linterDisposables = undefined;
+        }
+        if (config.enableLinter) {
+          linterDisposables = enableLinter();
+        }
+      }
+    })
   );
-
-  vscode.workspace.onDidCloseTextDocument(
-    linter.deleteDiagnostics,
-    null,
-    context.subscriptions
-  );
-
-  vscode.workspace.onDidSaveTextDocument(
-    linter.lintDocument,
-    null,
-    context.subscriptions
-  );
-
-  vscode.languages.registerCodeActionsProvider(config.selector, linter);
 
   context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration(event => {

@@ -13,6 +13,10 @@ export class IconLint implements vscode.CodeActionProvider {
     this.diagnosticCollection = vscode.languages.createDiagnosticCollection();
   }
 
+  dispose() {
+    this.diagnosticCollection.dispose();
+  }
+
   deleteDiagnostics(document: vscode.TextDocument) {
     this.diagnosticCollection.delete(document.uri);
   }

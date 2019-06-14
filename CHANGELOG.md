@@ -65,3 +65,8 @@ Initial release of Material Design Icons Intellisense
 
 - Hide `materialdesigniconsIntellisense.performIconSearch` and `materialdesigniconsIntellisense.openIconPreview` from the command palette
 - Add `materialdesigniconsIntellisense.changeInsertStyle` command
+
+## 1.5.0
+
+- Add `home-assistant` to `materialdesigniconsIntellisense.selector` (see [#4](https://github.com/lukas-tr/vscode-materialdesignicons-intellisense/pull/4))
+- Add `materialdesigniconsIntellisense.enableLinter` setting

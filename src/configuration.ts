@@ -54,5 +54,8 @@ export const config = {
       newType,
       vscode.ConfigurationTarget.Global
     );
+  },
+  get enableLinter() {
+    return config.all.get<boolean>("enableLinter");
   }
 };
