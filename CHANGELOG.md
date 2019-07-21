@@ -70,3 +70,7 @@ Initial release of Material Design Icons Intellisense
 
 - Add `home-assistant` to `materialdesigniconsIntellisense.selector` (see [#4](https://github.com/lukas-tr/vscode-materialdesignicons-intellisense/pull/4))
 - Add `materialdesigniconsIntellisense.enableLinter` setting
+
+## 1.5.1
+
+- Updated dependencies
