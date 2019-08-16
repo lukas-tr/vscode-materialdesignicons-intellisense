@@ -178,7 +178,8 @@
             },
             {
                 "command": "materialdesigniconsIntellisense.openIconPreview",
-                "when": false
+                "when": "false",
+                "title": "Open Icon Preview"
             },
             {
                 "command": "materialdesigniconsIntellisense.showIconSearch",
@@ -200,7 +201,8 @@
             },
             {
                 "command": "materialdesigniconsIntellisense.performIconSearch",
-                "when": false
+                "when": "false",
+                "title": "Icon Search"
             },
             {
                 "command": "materialdesigniconsIntellisense.insertIconInActiveEditor",
@@ -231,12 +233,12 @@
     },
     "devDependencies": {
         "@types/mocha": "^5.2.7",
-        "@types/node": "^12.6.8",
+        "@types/node": "^12.7.2",
         "tslint": "^5.18.0",
         "typescript": "^3.5.3",
-        "vscode": "^1.1.35"
+        "vscode": "^1.1.36"
     },
     "dependencies": {
-        "@mdi/svg": "^3.8.95"
+        "@mdi/svg": "^4.0.96"
     }
 }

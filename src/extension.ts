@@ -24,7 +24,14 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand(
     "materialdesigniconsIntellisense.openIconPreview",
-    (node: TreeNode) => showPreview(node, context)
+    (node?: TreeNode) => {
+      if (!node) {
+        return vscode.window.showInformationMessage(
+          "Click on an icon in the MDI Explorer view to preview icons"
+        );
+      }
+      showPreview(node, context);
+    }
   );
 
   context.subscriptions.push(
@@ -128,7 +135,12 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "materialdesigniconsIntellisense.performIconSearch",
-      search => {
+      (search?: string) => {
+        if (!search) {
+          return vscode.window.showInformationMessage(
+            "Use the MDI Explorer view to search icons"
+          );
+        }
         config.lastSearch = search;
 
         treeDataProvider.refresh();

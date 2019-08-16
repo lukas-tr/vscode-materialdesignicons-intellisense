@@ -74,3 +74,8 @@ Initial release of Material Design Icons Intellisense
 ## 1.5.1
 
 - Updated dependencies
+
+## 1.5.2
+
+- Updated dependencies
+- Fix ``property `title` is mandatory and must be of type `string` or `object` `` warning
