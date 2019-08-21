@@ -1,3 +1,5 @@
+# https://code.visualstudio.com/api/working-with-extensions/continuous-integration
+
 name: Node CI
 
 on: [push]
@@ -17,10 +19,14 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: |
-        export DISPLAY=':99.0'
+    - env:
+        DISPLAY: ":99.0"
+      run: |
         /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+        echo ">>> Started xvfb"
     - name: npm install, build, and test
+      env:
+        DISPLAY: ":99.0"
       run: |
         echo ">>> Install dependencies"
         npm install
@@ -29,4 +35,3 @@ jobs:
         echo ">>> Compiled vscode-test"
         echo ">>> Run sample integration test"
         npm test
-        
