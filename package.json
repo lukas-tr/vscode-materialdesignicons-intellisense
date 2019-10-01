@@ -2,7 +2,7 @@
     "name": "materialdesignicons-intellisense",
     "displayName": "Material Design Icons Intellisense",
     "description": "Provides intellisense for Material Design Icons",
-    "version": "1.5.2",
+    "version": "1.5.3",
     "engines": {
         "vscode": "^1.31.0"
     },
