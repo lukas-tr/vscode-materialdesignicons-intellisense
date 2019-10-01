@@ -180,10 +180,22 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     const disposables = vscode.Disposable.from(
-      vscode.workspace.onDidOpenTextDocument(linter.lintDocument, null),
-      vscode.workspace.onDidCloseTextDocument(linter.deleteDiagnostics, null),
-      vscode.workspace.onDidCloseTextDocument(linter.deleteDiagnostics, null),
-      vscode.workspace.onDidSaveTextDocument(linter.lintDocument, null),
+      vscode.workspace.onDidOpenTextDocument(
+        linter.lintDocument.bind(linter),
+        null
+      ),
+      vscode.workspace.onDidCloseTextDocument(
+        linter.deleteDiagnostics.bind(linter),
+        null
+      ),
+      vscode.workspace.onDidCloseTextDocument(
+        linter.deleteDiagnostics.bind(linter),
+        null
+      ),
+      vscode.workspace.onDidSaveTextDocument(
+        linter.lintDocument.bind(linter),
+        null
+      ),
       vscode.languages.registerCodeActionsProvider(config.selector, linter),
       linter
     );

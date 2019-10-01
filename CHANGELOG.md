@@ -83,3 +83,7 @@ Initial release of Material Design Icons Intellisense
 ## 1.5.3
 
 - Updated dependencies
+
+## 1.5.4
+
+- Fix `diagnosticCollection` being `undefined`

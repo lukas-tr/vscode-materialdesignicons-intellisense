@@ -14,11 +14,15 @@ export class IconLint implements vscode.CodeActionProvider {
   }
 
   dispose() {
-    this.diagnosticCollection.dispose();
+    if (this.diagnosticCollection) {
+      this.diagnosticCollection.dispose();
+    }
   }
 
   deleteDiagnostics(document: vscode.TextDocument) {
-    this.diagnosticCollection.delete(document.uri);
+    if (this.diagnosticCollection) {
+      this.diagnosticCollection.delete(document.uri);
+    }
   }
 
   async lintDocument(document: vscode.TextDocument) {
@@ -65,7 +69,9 @@ export class IconLint implements vscode.CodeActionProvider {
         }
       }
     }
-    this.diagnosticCollection.set(document.uri, diagnostics);
+    if (this.diagnosticCollection) {
+      this.diagnosticCollection.set(document.uri, diagnostics);
+    }
   }
 
   provideCodeActions(
