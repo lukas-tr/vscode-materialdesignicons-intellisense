@@ -233,12 +233,12 @@
     },
     "devDependencies": {
         "@types/mocha": "^5.2.7",
-        "@types/node": "^12.7.8",
+        "@types/node": "^12.7.12",
         "tslint": "^5.20.0",
-        "typescript": "^3.6.3",
+        "typescript": "^3.6.4",
         "vscode": "^1.1.36"
     },
     "dependencies": {
-        "@mdi/svg": "^4.4.95"
+        "@mdi/svg": "^4.5.95"
     }
 }
