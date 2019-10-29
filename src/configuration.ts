@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 import { CompletionType } from "./types";
 
-const searchCodeActionCode = Math.floor(Math.random() * 1000000);
+const searchCodeActionCode = 1;
 
 export const config = {
   get all() {
@@ -57,5 +57,8 @@ export const config = {
   },
   get enableLinter() {
     return config.all.get<boolean>("enableLinter");
+  },
+  get ignoredIcons(){
+    return config.all.get<string[]>("ignoredIcons") || [];
   }
 };

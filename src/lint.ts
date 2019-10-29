@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { getMdiMetaData } from "./util";
 import { config } from "./configuration";
+import { IIconMeta } from "./types";
 
 export class IconLint implements vscode.CodeActionProvider {
   static lintIconRegex = /\bmdi(-|:)((\w|\-)+)\b/gi;
@@ -42,36 +43,44 @@ export class IconLint implements vscode.CodeActionProvider {
         const index = match.index;
         const length = match[0].length;
         const iconName = match[2];
-        let iconExists = false;
 
-        for (const item of meta) {
-          if (iconName === item.name) {
-            iconExists = true;
-            break;
-          }
+        if (config.ignoredIcons.includes(match[0])) {
+          continue;
         }
-        if (!iconExists) {
-          const range = new vscode.Range(
-            line.lineNumber,
-            index,
-            line.lineNumber,
-            index + length
-          );
 
-          const diagnostic = new vscode.Diagnostic(
-            range,
-            `MDI: Icon mdi-${iconName} not found`,
-            vscode.DiagnosticSeverity.Information
-          );
-          diagnostic.code = config.searchCodeActionCode;
-
-          diagnostics.push(diagnostic);
+        if (this.iconExists(meta, iconName)) {
+          continue;
         }
+
+        const range = new vscode.Range(
+          line.lineNumber,
+          index,
+          line.lineNumber,
+          index + length
+        );
+
+        const diagnostic = new vscode.Diagnostic(
+          range,
+          `MDI: Icon mdi-${iconName} not found`,
+          vscode.DiagnosticSeverity.Information
+        );
+        diagnostic.code = config.searchCodeActionCode;
+
+        diagnostics.push(diagnostic);
       }
     }
     if (this.diagnosticCollection) {
       this.diagnosticCollection.set(document.uri, diagnostics);
     }
+  }
+
+  iconExists(meta: IIconMeta[], iconName: string) {
+    for (const item of meta) {
+      if (iconName === item.name) {
+        return true;
+      }
+    }
+    return false;
   }
 
   provideCodeActions(

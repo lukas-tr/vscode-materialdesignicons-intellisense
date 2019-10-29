@@ -166,6 +166,33 @@
                         "type": "boolean",
                         "default": true,
                         "description": "Lint Home Assistant and kebab case icon names"
+                    },
+                    "materialdesigniconsIntellisense.ignoredIcons": {
+                        "type": "array",
+                        "default": [
+                            "mdi-18px",
+                            "mdi-24px",
+                            "mdi-36px",
+                            "mdi-48px",
+                            "mdi-rotate-45",
+                            "mdi-rotate-90",
+                            "mdi-rotate-135",
+                            "mdi-rotate-180",
+                            "mdi-rotate-225",
+                            "mdi-rotate-270",
+                            "mdi-rotate-315",
+                            "mdi-flip-h",
+                            "mdi-flip-v",
+                            "mdi-spin",
+                            "mdi-light",
+                            "mdi-dark",
+                            "mdi-inactive"
+                        ],
+                        "items": {
+                            "type": "string"
+                        },
+                        "uniqueItems": true,
+                        "markdownDescription": "These values will be ignored by the linter."
                     }
                 }
             }
@@ -233,7 +260,7 @@
     },
     "devDependencies": {
         "@types/mocha": "^5.2.7",
-        "@types/node": "^12.7.12",
+        "@types/node": "^12.11.7",
         "tslint": "^5.20.0",
         "typescript": "^3.6.4",
         "vscode": "^1.1.36"

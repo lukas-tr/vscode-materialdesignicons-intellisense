@@ -55,6 +55,7 @@ This extension contributes the following settings:
 - `materialdesigniconsIntellisense.camelCase.noTextDeletionLanguages`: Already typed text won't be inserted for these langauges. A list of identifiers can be found [here](https://code.visualstudio.com/docs/languages/identifiers) or when executing the `Change Language Mode` command.
 - `materialdesigniconsIntellisense.homeAssistant.noTextDeletionLanguages`: Already typed text won't be inserted for these langauges. A list of identifiers can be found [here](https://code.visualstudio.com/docs/languages/identifiers) or when executing the `Change Language Mode` command.
 - `materialdesigniconsIntellisense.enableLinter`: Lint Home Assistant and kebab case icon names
+- `materialdesigniconsIntellisense.ignoredIcons`: Icons ignored by the linter
 
 <!-- ## Known Issues
 
