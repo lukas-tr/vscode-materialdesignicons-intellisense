@@ -96,3 +96,7 @@ Initial release of Material Design Icons Intellisense
 
 - Updated dependencies
 - Added ability to ignore certain icon names (linter)
+
+## 1.5.7
+
+- Updated dependencies
