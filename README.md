@@ -64,8 +64,6 @@ This extension contributes the following settings:
 The intellisense preview can be toggled with <kbd>Ctrl</kbd> + <kbd>Space</kbd> by default.
 You can also find the shortcut via `Preferences: Open Keyboard Shortcuts` and searching for `toggleSuggestionDetails`.
 
-The intellisense preview can be toggled with <kbd>Ctrl</kbd> + <kbd>Space</kbd> by default.
-
 <!-- ## Known Issues
 
 Calling out known issues can help limit users opening duplicate issues against your extension. -->
