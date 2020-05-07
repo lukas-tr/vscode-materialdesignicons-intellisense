@@ -100,3 +100,8 @@ Initial release of Material Design Icons Intellisense
 ## 1.5.7
 
 - Updated dependencies
+
+
+## 1.5.8
+
+- Updated readme
