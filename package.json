@@ -266,6 +266,6 @@
         "vscode": "^1.1.37"
     },
     "dependencies": {
-        "@mdi/svg": "^4.9.95"
+        "@mdi/svg": "^5.1.45"
     }
 }
