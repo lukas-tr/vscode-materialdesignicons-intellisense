@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { CompletionType } from "./types";
+import { hexToRgbString } from "./util";
 
 const searchCodeActionCode = 1;
 
@@ -11,8 +12,12 @@ export const config = {
   get iconSize() {
     return config.all.get<number>("iconSize") || 100;
   },
+  /**
+   * For some reason, vscode doesn't display the icon in tree view if the color contains `#`
+   * @returns {string} rgb(r, g, b)
+   */
   get iconColor() {
-    return config.all.get<string>("iconColor") || "#bababa";
+    return hexToRgbString(config.all.get<string>("iconColor") || "#bababa");
   },
   get selector() {
     return config.all.get<string[]>("selector") || [];

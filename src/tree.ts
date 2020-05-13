@@ -34,9 +34,7 @@ export class IconTreeDataProvider
           : createCompletion(element.meta.name),
       iconPath:
         element.type === "icon" &&
-        path.normalize(
-          path.join(config.mdiPath, "svg", `${element.meta.name}.svg`)
-        ),
+        vscode.Uri.parse(`data:image/svg+xml;utf8,${element.doc.rawIcon}`),
       collapsibleState:
         element.type === "tag" || element.type === "other"
           ? vscode.TreeItemCollapsibleState.Collapsed
@@ -49,18 +47,18 @@ export class IconTreeDataProvider
           : {
               command: "materialdesigniconsIntellisense.openIconPreview",
               arguments: [element],
-              title: "Open FTP Resource"
-            }
+              title: "Open icon preview",
+            },
     };
   }
 
   public getChildren(element?: TreeNode): TreeNode[] | Thenable<TreeNode[]> {
-    return getMdiMetaData().then(d => {
+    return getMdiMetaData().then((d) => {
       if (element) {
         let filtered: IIconMeta[] = [];
         if (element.type === "tag") {
           filtered = [...d].filter(
-            a =>
+            (a) =>
               (a.tags.length === 0 && element.tag === "Other") ||
               a.tags.indexOf(element.tag) !== -1
           );
@@ -68,12 +66,12 @@ export class IconTreeDataProvider
         if (element.type === "other") {
           const tokens = config.lastSearch
             .split(/(\s|-)/)
-            .map(s => s.trim())
-            .filter(s => s);
-          filtered = [...d].filter(a => {
+            .map((s) => s.trim())
+            .filter((s) => s);
+          filtered = [...d].filter((a) => {
             let matches = false;
-            tokens.forEach(token => {
-              [a.name, ...a.aliases].forEach(t => {
+            tokens.forEach((token) => {
+              [a.name, ...a.aliases].forEach((t) => {
                 if (t.includes(token)) {
                   matches = true;
                 }
@@ -91,10 +89,10 @@ export class IconTreeDataProvider
           async (child): Promise<TreeNode> => ({
             type: "icon",
             meta: child,
-            doc: await getIconData(child)
+            doc: await getIconData(child),
           })
         );
-        return Promise.all(children).then(c => {
+        return Promise.all(children).then((c) => {
           c.sort(
             (a, b) =>
               (a.type === "icon" &&
@@ -107,8 +105,8 @@ export class IconTreeDataProvider
       }
       const tags = d.reduce<{
         [idx: string]: true | undefined;
-      }>((prev, cur) => (cur.tags.forEach(t => (prev[t] = true)), prev), {
-        Other: true
+      }>((prev, cur) => (cur.tags.forEach((t) => (prev[t] = true)), prev), {
+        Other: true,
       });
       const children = Object.keys(tags)
         .map((tag): TreeNode => ({ type: "tag", tag }))
@@ -121,7 +119,7 @@ export class IconTreeDataProvider
         );
       const searchResult: TreeNode = {
         type: "other",
-        label: "Search results"
+        label: "Search results",
       };
       if (config.lastSearch) {
         children.unshift(searchResult);
@@ -135,7 +133,7 @@ export class IconTreeDataProvider
       ? null
       : {
           type: "tag",
-          tag: element.meta.tags[0] || "Other"
+          tag: element.meta.tags[0] || "Other",
         };
     // const parent = element.resource.with ({   path:
     // dirname(element.resource.path) }) ; return parent.path !== '//'   ? {
