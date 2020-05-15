@@ -259,13 +259,18 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "@types/mocha": "^5.2.7",
-        "@types/node": "^12.12.38",
-        "tslint": "^5.20.1",
-        "typescript": "^3.8.3",
+        "@types/mocha": "^7.0.2",
+        "@types/node": "^14.0.1",
+        "@types/semver": "^7.2.0",
+        "@types/tar": "^4.0.3",
+        "tslint": "^6.1.2",
+        "typescript": "^3.9.2",
         "vscode": "^1.1.37"
     },
     "dependencies": {
-        "@mdi/svg": "^5.1.45"
+        "@mdi/svg": "^5.2.45",
+        "fuse.js": "^5.2.3",
+        "semver": "^7.3.2",
+        "tar": "^6.0.2"
     }
 }

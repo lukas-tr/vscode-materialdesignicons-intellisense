@@ -26,11 +26,16 @@ export interface IIconNode {
   type: "icon";
   doc: IIconDoc;
   meta: IIconMeta;
+  search?: {
+    score?: number;
+    matches?: string[];
+  };
 }
 
 export interface ITagNode {
   type: "tag";
   tag: string;
+  childCount?: number;
 }
 
 export interface ISearchNode {
