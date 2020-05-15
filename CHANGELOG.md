@@ -108,3 +108,13 @@ Initial release of Material Design Icons Intellisense
 ## 1.5.9
 
 - Updated dependencies
+
+## 2.0.0
+
+- Removed settings (those should no longer be necessary after adding `range` to the completion)
+  - `materialdesigniconsIntellisense.kebabCase.noTextDeletionLanguages`
+  - `materialdesigniconsIntellisense.camelCase.noTextDeletionLanguages`
+  - `materialdesigniconsIntellisense.homeAssistant.noTextDeletionLanguages`
+- `materialdesigniconsIntellisense.iconColor` is now also applied to icons in the tree view
+- Icon search now uses `fuse.js`
+- Added ability to change MDI version

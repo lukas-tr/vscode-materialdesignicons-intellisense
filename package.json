@@ -45,6 +45,14 @@
                     "group": "navigation"
                 },
                 {
+                    "command": "materialdesigniconsIntellisense.changeMdiVersion",
+                    "when": "view == materialDesignIconsExplorer"
+                },
+                {
+                    "command": "materialdesigniconsIntellisense.changeLanguages",
+                    "when": "view == materialDesignIconsExplorer"
+                },
+                {
                     "command": "materialdesigniconsIntellisense.changeInsertStyle",
                     "when": "view == materialDesignIconsExplorer",
                     "group": "navigation"
@@ -118,7 +126,12 @@
                     "materialdesigniconsIntellisense.overrideFontPackagePath": {
                         "type": "string",
                         "default": "",
-                        "markdownDescription": "Override the path to the `@mdi/svg` package. \nTo use a global installation, set this to `<global npm root>/@mdi/svg` where `<global npm root>` is the output of `npm root -g`"
+                        "markdownDescription": "Use `#materialdesigniconsIntellisense.mdiVersion#` if possible. Overwrite the path to the `@mdi/svg` package. To use a global installation, set this to `<global npm root>/@mdi/svg` where `<global npm root>` is the output of `npm root -g`"
+                    },
+                    "materialdesigniconsIntellisense.mdiVersion": {
+                        "type": "string",
+                        "default": "latest",
+                        "markdownDescription": "`@mdi/svg` version to use. This can either be `latest` or a specific version like `5.2.45`. `#materialdesigniconsIntellisense.overrideFontPackagePath#` will overwrite this setting."
                     },
                     "materialdesigniconsIntellisense.insertStyle": {
                         "type": "string",
@@ -129,38 +142,6 @@
                         ],
                         "default": "kebabCase",
                         "markdownDescription": "Insert icons from the tree view in kebab case (if you use `@mdi/font`, eg `mdi-account`) or camel case (if you use `@mdi/js`, eg `mdiAccount`). You might also want to change `insertPrefix` and `insertSuffix`."
-                    },
-                    "materialdesigniconsIntellisense.kebabCase.noTextDeletionLanguages": {
-                        "type": "array",
-                        "default": [],
-                        "items": {
-                            "type": "string"
-                        },
-                        "uniqueItems": true,
-                        "markdownDescription": "Already typed text won't be inserted for these langauges. A list of identifiers can be found [here](https://code.visualstudio.com/docs/languages/identifiers) or when executing the `Change Language Mode` command."
-                    },
-                    "materialdesigniconsIntellisense.camelCase.noTextDeletionLanguages": {
-                        "type": "array",
-                        "default": [
-                            "javascript",
-                            "typescript",
-                            "javascriptreact",
-                            "typescriptreact"
-                        ],
-                        "items": {
-                            "type": "string"
-                        },
-                        "uniqueItems": true,
-                        "markdownDescription": "Already typed text won't be inserted for these langauges. A list of identifiers can be found [here](https://code.visualstudio.com/docs/languages/identifiers) or when executing the `Change Language Mode` command."
-                    },
-                    "materialdesigniconsIntellisense.homeAssistant.noTextDeletionLanguages": {
-                        "type": "array",
-                        "default": [],
-                        "items": {
-                            "type": "string"
-                        },
-                        "uniqueItems": true,
-                        "markdownDescription": "Already typed text won't be inserted for these langauges. A list of identifiers can be found [here](https://code.visualstudio.com/docs/languages/identifiers) or when executing the `Change Language Mode` command."
                     },
                     "materialdesigniconsIntellisense.enableLinter": {
                         "type": "boolean",
@@ -200,17 +181,17 @@
         "commands": [
             {
                 "command": "materialdesigniconsIntellisense.showMdiVersion",
-                "title": "Show MDI Version",
+                "title": "Show MDI version",
                 "category": "MDI"
             },
             {
                 "command": "materialdesigniconsIntellisense.openIconPreview",
                 "when": "false",
-                "title": "Open Icon Preview"
+                "title": "Open icon preview"
             },
             {
                 "command": "materialdesigniconsIntellisense.showIconSearch",
-                "title": "Open Icon Search",
+                "title": "Open icon search",
                 "icon": {
                     "light": "icons/light/magnify.svg",
                     "dark": "icons/dark/magnify.svg"
@@ -218,8 +199,13 @@
                 "category": "MDI"
             },
             {
-                "command": "materialdesigniconsIntellisense.changeInsertStyle",
-                "title": "Change Insert Style",
+                "command": "materialdesigniconsIntellisense.changeLanguages",
+                "title": "Select languages",
+                "category": "MDI"
+            },
+            {
+                "command": "materialdesigniconsIntellisense.changeMdiVersion",
+                "title": "Change MDI version",
                 "icon": {
                     "light": "icons/light/toggle-switch.svg",
                     "dark": "icons/dark/toggle-switch.svg"
@@ -227,13 +213,22 @@
                 "category": "MDI"
             },
             {
+                "command": "materialdesigniconsIntellisense.changeInsertStyle",
+                "title": "Change insert style",
+                "icon": {
+                    "light": "icons/light/format-letter-case.svg",
+                    "dark": "icons/dark/format-letter-case.svg"
+                },
+                "category": "MDI"
+            },
+            {
                 "command": "materialdesigniconsIntellisense.performIconSearch",
                 "when": "false",
-                "title": "Icon Search"
+                "title": "Icon search"
             },
             {
                 "command": "materialdesigniconsIntellisense.insertIconInActiveEditor",
-                "title": "Insert Icon In Editor",
+                "title": "Insert icon in editor",
                 "icon": {
                     "light": "icons/light/content-paste.svg",
                     "dark": "icons/dark/content-paste.svg"
@@ -242,7 +237,7 @@
             },
             {
                 "command": "materialdesigniconsIntellisense.closeSearch",
-                "title": "Close Icon Search",
+                "title": "Close icon search",
                 "icon": {
                     "light": "icons/light/close.svg",
                     "dark": "icons/dark/close.svg"

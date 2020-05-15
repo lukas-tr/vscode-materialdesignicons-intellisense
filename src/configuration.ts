@@ -6,6 +6,7 @@ import { hexToRgbString } from "./util";
 const searchCodeActionCode = 1;
 
 export const config = {
+  context: null as vscode.ExtensionContext | null, // TODO: refactor
   get all() {
     return vscode.workspace.getConfiguration("materialdesigniconsIntellisense");
   },
@@ -22,6 +23,13 @@ export const config = {
   get selector() {
     return config.all.get<string[]>("selector") || [];
   },
+  updateSelector(selector: string[]) {
+    return config.all.update(
+      "selector",
+      selector,
+      vscode.ConfigurationTarget.Global
+    );
+  },
   get includeAliases() {
     return config.all.get<boolean>("includeAliases") || false;
   },
@@ -31,10 +39,37 @@ export const config = {
   get suffix() {
     return config.all.get<string>("insertSuffix") || "";
   },
+  get latestMdiVersion() {
+    return config.context?.globalState.get<string>("latestMdiVersion");
+  },
+  updateLatestMdiVersion(version: string) {
+    return config.context?.globalState.update("latestMdiVersion", version);
+  },
+  get rawMdiVersion() {
+    return config.all.get<string>("mdiVersion") || "latest";
+  },
+  get mdiVersion() {
+    const version = config.rawMdiVersion;
+    return version === "latest" ? config.latestMdiVersion : version;
+  },
+  updateMdiVersion(version: string) {
+    return config.all.update(
+      "mdiVersion",
+      version,
+      vscode.ConfigurationTarget.Global
+    );
+  },
   get mdiPath() {
     return (
       config.all.get<string>("overrideFontPackagePath") ||
-      path.normalize(path.join(__dirname, "../node_modules/@mdi/svg/"))
+      (config.context &&
+        config.mdiVersion &&
+        path.join(
+          config.context.globalStoragePath,
+          config.mdiVersion,
+          "package"
+        )) ||
+      path.normalize(path.join(__dirname, "../node_modules/@mdi/svg/")) // fallback
     );
   },
   get mdiPackagePath() {
@@ -49,9 +84,6 @@ export const config = {
   get insertType() {
     return config.all.get<CompletionType>("insertStyle")!;
   },
-  insertTypeSpecificConfig(type: CompletionType) {
-    return config.all.get<{ noTextDeletionLanguages: string[] }>(type)!;
-  },
   lastSearch: "",
   changeInsertType(newType: CompletionType) {
     return config.all.update(
@@ -63,7 +95,7 @@ export const config = {
   get enableLinter() {
     return config.all.get<boolean>("enableLinter");
   },
-  get ignoredIcons(){
+  get ignoredIcons() {
     return config.all.get<string[]>("ignoredIcons") || [];
-  }
+  },
 };

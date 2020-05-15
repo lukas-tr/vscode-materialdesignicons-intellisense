@@ -14,8 +14,6 @@ Unknown icon names are highlighted and listed in the Problems panel - kebab-case
 
 The explorer contains a list of all icons grouped by category. Icons can be filtered using the magnifier icon. You can use the `materialdesigniconsIntellisense.insertStyle` setting to change the syntax of the inserted snippet.
 
-If too much text is deleted after inserting an icon, you can add the current language to `materialdesigniconsIntellisense.kebabCase.noTextDeletionLanguages`, `materialdesigniconsIntellisense.camelCase.noTextDeletionLanguages` or `materialdesigniconsIntellisense.homeAssistant.noTextDeletionLanguages`. See [#3](https://github.com/lukas-tr/vscode-materialdesignicons-intellisense/issues/3) for an explanation.
-
 ### Intellisense
 
 ![Intellisense](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-1.gif)
@@ -51,9 +49,6 @@ This extension contributes the following settings:
 - `materialdesigniconsIntellisense.insertSuffix`: Text inserted after the actual icon name.
 - `materialdesigniconsIntellisense.includeAliases`: Also include icon aliases in completion items.
 - `materialdesigniconsIntellisense.overrideFontPackagePath`: Override the path to the `@mdi/svg` package. To use a global installation, set this to `<global npm root>/@mdi/svg` where `<global npm root>` is the output of `npm root -g`
-- `materialdesigniconsIntellisense.kebabCase.noTextDeletionLanguages`: Already typed text won't be inserted for these langauges. A list of identifiers can be found [here](https://code.visualstudio.com/docs/languages/identifiers) or when executing the `Change Language Mode` command.
-- `materialdesigniconsIntellisense.camelCase.noTextDeletionLanguages`: Already typed text won't be inserted for these langauges. A list of identifiers can be found [here](https://code.visualstudio.com/docs/languages/identifiers) or when executing the `Change Language Mode` command.
-- `materialdesigniconsIntellisense.homeAssistant.noTextDeletionLanguages`: Already typed text won't be inserted for these langauges. A list of identifiers can be found [here](https://code.visualstudio.com/docs/languages/identifiers) or when executing the `Change Language Mode` command.
 - `materialdesigniconsIntellisense.enableLinter`: Lint Home Assistant and kebab case icon names
 - `materialdesigniconsIntellisense.ignoredIcons`: Icons ignored by the linter
 
