@@ -18,6 +18,10 @@ The explorer contains a list of all icons grouped by category. Icons can be filt
 
 ![Intellisense](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-1.gif)
 
+### Switching between different versions
+
+![Switching between versions](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/change-mdi-version.gif)
+
 ### camelCase, kebab-case and Home Assistant completion
 
 ![camelCase and kebab-case completion](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-6.gif)
