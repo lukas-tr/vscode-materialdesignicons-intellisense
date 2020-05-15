@@ -24,21 +24,12 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
 
     const meta = await getMdiMetaData();
 
-    const additionalTextEdits =
-      config
-        .insertTypeSpecificConfig(completionType)
-        .noTextDeletionLanguages.indexOf(document.languageId) === -1
-        ? [
-            vscode.TextEdit.delete(
-              new vscode.Range(
-                position.line,
-                position.character - match[0].length,
-                position.line,
-                position.character
-              )
-            )
-          ]
-        : [];
+    const range = new vscode.Range(
+      position.line,
+      position.character - match[0].length,
+      position.line,
+      position.character
+    );
 
     return {
       incomplete: true,
@@ -52,12 +43,12 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
                 sortText: name,
                 meta: cur,
                 completionType,
-                additionalTextEdits
+                range,
               })
             )
           ),
         []
-      )
+      ),
     };
   }
 
@@ -65,7 +56,7 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
     item: IIconCompletionItem,
     token: vscode.CancellationToken
   ): vscode.ProviderResult<vscode.CompletionItem> {
-    return getIconData(item.meta).then(data => {
+    return getIconData(item.meta).then((data) => {
       return {
         ...item,
         documentation: data.icon.appendMarkdown(`
@@ -78,7 +69,7 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         insertText: `${config.prefix}${createCompletion(
           item.meta.name,
           item.completionType
-        )}${config.suffix}`
+        )}${config.suffix}`,
       };
     });
   }
