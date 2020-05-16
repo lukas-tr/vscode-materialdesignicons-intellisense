@@ -122,3 +122,7 @@ Initial release of Material Design Icons Intellisense
 ## 2.0.1
 
 - Improved logging
+
+## 2.0.2
+
+- Improved readme
