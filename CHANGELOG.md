@@ -118,3 +118,7 @@ Initial release of Material Design Icons Intellisense
 - `materialdesigniconsIntellisense.iconColor` is now also applied to icons in the tree view
 - Icon search now uses `fuse.js`
 - Added ability to change MDI version
+
+## 2.0.1
+
+- Improved logging
