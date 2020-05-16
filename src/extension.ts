@@ -12,6 +12,7 @@ import {
   handleDownload,
   getVersions,
   IVersionInfo,
+  log,
 } from "./util";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -132,22 +133,27 @@ export function activate(context: vscode.ExtensionContext) {
             progress.report({
               message: "Getting versions from registry.npmjs.org",
             });
-            info = await getVersions();
-            await config.updateLatestMdiVersion(info.latest);
-            items = [
-              {
-                label: "latest",
-                description:
-                  `currently ${info.latest}` +
-                  ("latest" === config.rawMdiVersion ? " - selected" : ""),
-              },
-              ...info.versions.map<vscode.QuickPickItem>((v) => ({
-                label: v.version,
-                description:
-                  v.time +
-                  (v.version === config.rawMdiVersion ? " - selected" : ""),
-              })),
-            ];
+            try {
+              info = await getVersions();
+              await config.updateLatestMdiVersion(info.latest);
+              items = [
+                {
+                  label: "latest",
+                  description:
+                    `currently ${info.latest}` +
+                    ("latest" === config.rawMdiVersion ? " - selected" : ""),
+                },
+                ...info.versions.map<vscode.QuickPickItem>((v) => ({
+                  label: v.version,
+                  description:
+                    v.time +
+                    (v.version === config.rawMdiVersion ? " - selected" : ""),
+                })),
+              ];
+            } catch (error) {
+              log(error);
+              vscode.window.showErrorMessage(error.message);
+            }
           }
         );
         const result = await vscode.window.showQuickPick<vscode.QuickPickItem>(
@@ -348,16 +354,20 @@ export function activate(context: vscode.ExtensionContext) {
   // auto update
   if (config.rawMdiVersion === "latest") {
     (async () => {
-      const info = await getVersions();
-      if (config.mdiVersion !== info.latest) {
-        await handleDownload(info.latest, info);
-        await config.updateLatestMdiVersion(info.latest);
-        treeDataProvider.refresh();
+      try {
+        const info = await getVersions();
+        if (config.mdiVersion !== info.latest) {
+          await handleDownload(info.latest, info);
+          await config.updateLatestMdiVersion(info.latest);
+          treeDataProvider.refresh();
+        }
+      } catch (error) {
+        log(error);
       }
     })();
   }
 
-  console.log('"materialdesignicons-intellisense" is now active');
+  log('"materialdesignicons-intellisense" is now active');
 }
 
 // this method is called when your extension is deactivated

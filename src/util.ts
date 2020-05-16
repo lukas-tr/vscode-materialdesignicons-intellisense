@@ -162,13 +162,11 @@ export const getPackageInfo = (url = "https://registry.npmjs.org/@mdi/svg") => {
         try {
           resolve(JSON.parse(chunks.join("")));
         } catch (e) {
-          console.error(e);
           reject(e);
         }
       });
     });
     req.on("error", function (e) {
-      console.log("problem with request: " + e.message);
       reject(e);
     });
     req.end();
