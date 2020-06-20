@@ -14,6 +14,7 @@
         "type": "git",
         "url": "https://github.com/lukas-tr/vscode-materialdesignicons-intellisense.git"
     },
+    "license": "MIT",
     "keywords": [
         "material-design",
         "icons",
@@ -45,17 +46,21 @@
                     "group": "navigation"
                 },
                 {
-                    "command": "materialdesigniconsIntellisense.changeMdiVersion",
-                    "when": "view == materialDesignIconsExplorer"
+                    "command": "materialdesigniconsIntellisense.changeInsertStyle",
+                    "when": "view == materialDesignIconsExplorer",
+                    "group": "navigation"
                 },
                 {
                     "command": "materialdesigniconsIntellisense.changeLanguages",
                     "when": "view == materialDesignIconsExplorer"
                 },
                 {
-                    "command": "materialdesigniconsIntellisense.changeInsertStyle",
-                    "when": "view == materialDesignIconsExplorer",
-                    "group": "navigation"
+                    "command": "materialdesigniconsIntellisense.changeMdiVersion",
+                    "when": "view == materialDesignIconsExplorer"
+                },
+                {
+                    "command": "materialdesigniconsIntellisense.changeSettings",
+                    "when": "view == materialDesignIconsExplorer"
                 }
             ],
             "view/item/context": [
@@ -108,16 +113,6 @@
                         "uniqueItems": true,
                         "description": "Defines the documents where completion and hover are active"
                     },
-                    "materialdesigniconsIntellisense.insertPrefix": {
-                        "type": "string",
-                        "default": "",
-                        "description": "Text inserted before the actual icon name"
-                    },
-                    "materialdesigniconsIntellisense.insertSuffix": {
-                        "type": "string",
-                        "default": "",
-                        "description": "Text inserted after the actual icon name"
-                    },
                     "materialdesigniconsIntellisense.includeAliases": {
                         "type": "boolean",
                         "default": true,
@@ -135,13 +130,8 @@
                     },
                     "materialdesigniconsIntellisense.insertStyle": {
                         "type": "string",
-                        "enum": [
-                            "kebabCase",
-                            "camelCase",
-                            "homeAssistant"
-                        ],
                         "default": "kebabCase",
-                        "markdownDescription": "Insert icons from the tree view in kebab case (if you use `@mdi/font`, eg `mdi-account`) or camel case (if you use `@mdi/js`, eg `mdiAccount`). You might also want to change `insertPrefix` and `insertSuffix`."
+                        "markdownDescription": "Insert style for MDI Explorer. Available options in `#materialdesigniconsIntellisense.matchers#`."
                     },
                     "materialdesigniconsIntellisense.enableLinter": {
                         "type": "boolean",
@@ -174,6 +164,70 @@
                         },
                         "uniqueItems": true,
                         "markdownDescription": "These values will be ignored by the linter."
+                    },
+                    "materialdesigniconsIntellisense.matchers": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "title": "matchers",
+                            "properties": {
+                                "match": {
+                                    "type": "string",
+                                    "description": "Regex used for hover previews and completion (prefix only)"
+                                },
+                                "insert": {
+                                    "type": "string",
+                                    "description": "Used for inserting from MDI Explorer."
+                                },
+                                "displayName": {
+                                    "type": "string",
+                                    "description": "Name shown when switching between insert types."
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "description": "Identifier used for `#materialdesigniconsIntellisense.insertStyle#`"
+                                }
+                            }
+                        },
+                        "default": [
+                            {
+                                "match": "Mdi\\.{camel}",
+                                "insert": "Icon(Mdi.{camel})",
+                                "displayName": "Flutter (mdi)",
+                                "name": "flutter1"
+                            },
+                            {
+                                "match": "MdiIcons\\.fromString\\(['\"]{camel}['\"]\\)",
+                                "insert": "MdiIcons.fromString('{camel}')",
+                                "displayName": "Flutter (material_design_icons_flutter, fromString)",
+                                "name": "flutter2"
+                            },
+                            {
+                                "match": "MdiIcons\\.{camel}",
+                                "insert": "Icon(MdiIcons.{camel})",
+                                "displayName": "Flutter (material_design_icons_flutter)",
+                                "name": "flutter3"
+                            },
+                            {
+                                "match": "mdi:{param}",
+                                "insert": "mdi:{param}",
+                                "displayName": "kebab-case (web font)",
+                                "name": "kebabCase"
+                            },
+                            {
+                                "match": "mdi{pascal}",
+                                "insert": "mdi{pascal}",
+                                "displayName": "camelCase (js)",
+                                "name": "camelCase"
+                            },
+                            {
+                                "match": "mdi-{param}",
+                                "insert": "mdi-{param}",
+                                "displayName": "Home Assistant",
+                                "name": "homeAssistant"
+                            }
+                        ],
+                        "markdownDescription": "See https://github.com/lukas-tr/vscode-materialdesignicons-intellisense#faq"
                     }
                 }
             }
@@ -201,6 +255,11 @@
             {
                 "command": "materialdesigniconsIntellisense.changeLanguages",
                 "title": "Select languages",
+                "category": "MDI"
+            },
+            {
+                "command": "materialdesigniconsIntellisense.changeSettings",
+                "title": "Change settings",
                 "category": "MDI"
             },
             {
@@ -255,16 +314,17 @@
     },
     "devDependencies": {
         "@types/mocha": "^7.0.2",
-        "@types/node": "^14.0.1",
+        "@types/node": "^14.0.13",
         "@types/semver": "^7.2.0",
         "@types/tar": "^4.0.3",
         "tslint": "^6.1.2",
-        "typescript": "^3.9.2",
+        "typescript": "^3.9.5",
         "vscode": "^1.1.37"
     },
     "dependencies": {
-        "@mdi/svg": "^5.2.45",
-        "fuse.js": "^6.0.0",
+        "@mdi/svg": "^5.3.45",
+        "change-case": "^4.1.1",
+        "fuse.js": "^6.2.0",
         "semver": "^7.3.2",
         "tar": "^6.0.2"
     }

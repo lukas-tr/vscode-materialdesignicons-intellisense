@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
+
 import { TreeNode, CompletionType } from "./types";
 import { config } from "./configuration";
 import { IconTreeDataProvider } from "./tree";
@@ -8,11 +9,11 @@ import { CompletionProvider } from "./completion";
 import { IconLint } from "./lint";
 import { showPreview } from "./preview";
 import {
-  createCompletion,
   handleDownload,
   getVersions,
   IVersionInfo,
   log,
+  createCompletion,
 } from "./util";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -61,17 +62,26 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand(
     "materialdesigniconsIntellisense.insertIconInActiveEditor",
-    (node: TreeNode) => {
+    async (node: TreeNode) => {
       const editor = vscode.window.activeTextEditor;
       if (editor) {
         if (node.type === "icon") {
-          editor.insertSnippet(
-            new vscode.SnippetString(
-              `${config.prefix}${createCompletion(node.doc.name)}${
-                config.suffix
-              }`
-            )
+          const match = config.matchers.find(
+            (m) => m.name === config.insertType
           );
+          if (!match) {
+            vscode.window.showInformationMessage(
+              `InsertType ${config.insertType} not found`
+            );
+            return;
+          }
+          const snippet = match.insert.replace(
+            /\{(\w+)\}/,
+            (group0, group1) => {
+              return createCompletion(node.doc.name, group1);
+            }
+          );
+          await editor.insertSnippet(new vscode.SnippetString(snippet));
         }
       } else {
         vscode.window.showInformationMessage(`No active editor`);
@@ -115,6 +125,17 @@ export function activate(context: vscode.ExtensionContext) {
           search
         );
       }
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "materialdesigniconsIntellisense.changeSettings",
+      () =>
+        vscode.commands.executeCommand(
+          "workbench.action.openSettings",
+          "materialdesigniconsIntellisense"
+        )
     )
   );
 
@@ -179,17 +200,18 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand(
       "materialdesigniconsIntellisense.changeInsertStyle",
       async () => {
-        const result = (await vscode.window.showQuickPick(
-          ["kebabCase", "camelCase", "homeAssistant"].filter(
-            (t) => t !== config.insertType
-          ),
-          {
-            canPickMany: false,
-            placeHolder: `Currently selected: ${config.insertType}`,
-          }
-        )) as CompletionType | undefined;
+        const items = config.matchers.map((m): vscode.QuickPickItem & {
+          name: string;
+        } => ({
+          label: m.displayName,
+          description: m.name === config.insertType ? "selected" : "",
+          name: m.name,
+        }));
+        const result = await vscode.window.showQuickPick(items, {
+          canPickMany: false,
+        });
         if (result) {
-          await config.changeInsertType(result);
+          await config.changeInsertType(result.name);
           treeDataProvider.refresh();
         }
       }
@@ -269,10 +291,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.languages.registerCompletionItemProvider(
       config.selector,
-      new CompletionProvider(),
-      "-",
-      "i",
-      ":"
+      new CompletionProvider()
     )
   );
 

@@ -1,5 +1,6 @@
-import { TreeNode } from "./types";
 import * as vscode from "vscode";
+
+import { TreeNode } from "./types";
 
 let currentPreviewPanel: vscode.WebviewPanel | undefined = undefined;
 

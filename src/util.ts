@@ -1,11 +1,13 @@
-import { IIconMeta, IIconDoc, CompletionType } from "./types";
-import { config } from "./configuration";
 import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
 import * as https from "https";
 import * as tar from "tar";
 import { sort } from "semver";
+import * as changeCase from "change-case";
+
+import { IIconMeta, IIconDoc, CompletionType } from "./types";
+import { config } from "./configuration";
 
 export const getMdiMetaData = async (): Promise<IIconMeta[]> => {
   let data: Buffer;
@@ -52,11 +54,6 @@ export const getIconData = async (item: IIconMeta): Promise<IIconDoc> => {
     log(err);
     data = await fs.promises.readFile(fallbackSvgPath);
   }
-
-  // if (err) {
-  //   vscode.window.showErrorMessage(err.message);
-  //   return reject(err);
-  // }
   const utf8String = data
     .toString("utf8")
     .replace(/<path/gi, `<path fill="${config.iconColor}" `);
@@ -78,29 +75,6 @@ export const getIconData = async (item: IIconMeta): Promise<IIconDoc> => {
     rawIcon: utf8String,
   };
 };
-
-export const createCompletion = (iconName: string, type?: CompletionType) => {
-  if (typeof type === "undefined") {
-    type = config.insertType;
-  }
-  switch (type) {
-    case CompletionType.camelCase:
-      return kebabCaseToCamelCase(`mdi-${iconName}`);
-    case CompletionType.homeAssistant:
-      return `mdi:${iconName}`;
-    case CompletionType.kebabCase:
-    default:
-      return `mdi-${iconName}`;
-  }
-};
-
-export const kebabCaseToCamelCase = (kebabStr: string) =>
-  kebabStr.replace(/-([a-z0-9])/g, (match) => {
-    return match[1].toUpperCase();
-  });
-
-export const pascalCaseToKebabCase = (pascalStr: string) =>
-  pascalStr.replace(/([a-z])([A-Z0-9])/g, "$1-$2").toLowerCase();
 
 let outputChannel: vscode.OutputChannel | null = null;
 
@@ -220,4 +194,81 @@ export const downloadAndExtractTarball = (
     });
     req.end();
   });
+};
+
+export const matcherStringToRegex = (str: string) => {
+  const result = /\{(\w+)\}/.exec(str);
+  if (!result) {
+    log("Type not found in matcher");
+    return null;
+  }
+
+  const replacements = {
+    camel: "A-Za-z",
+    param: "-a-z",
+    pascal: "A-Za-z",
+    constant: "_A-Z",
+    dot: ".a-z",
+    header: "-A-Za-z",
+    no: " a-z",
+    path: "/a-z",
+    snake: "_a-z",
+  };
+  const type = result[1] as CompletionType;
+  const replacement = (replacements as any)[type];
+  if (!replacement) {
+    log("invalid matcher syntax");
+    return null;
+  }
+  const createIconRegex = (count: string) =>
+    `(?<icon>[${replacement}0-9]${count})`;
+  const prefix = result.input.slice(0, result.index);
+  return {
+    fullRegex: new RegExp(str.replace(/\{\w+\}/i, createIconRegex("+")), "i"),
+    type,
+    suggestionPrefixAndIconRegex: new RegExp(
+      `(?<prefix>${prefix})${createIconRegex("*")}$`
+    ),
+  };
+};
+
+export const getMatchAtPosition = (
+  document: vscode.TextDocument,
+  position: vscode.Position
+) => {
+  const matchers = config.matchers;
+  for (const matcher of matchers) {
+    const regex = matcherStringToRegex(matcher.match);
+    if (!regex) continue;
+    const range = document.getWordRangeAtPosition(position, regex.fullRegex);
+    if (!range) {
+      continue;
+    }
+    const text = document.getText(range);
+    const match = regex.fullRegex.exec(text);
+    if (!match || !match.groups) {
+      continue;
+    }
+    const iconName = changeCase.paramCase(match.groups.icon);
+    return {
+      match,
+      iconName,
+      range,
+    };
+  }
+};
+
+export const createCompletion = (iconName: string, type: CompletionType) => {
+  const transformers: { [key in CompletionType]: (s: string) => string } = {
+    camel: changeCase.camelCase,
+    param: changeCase.paramCase,
+    pascal: changeCase.pascalCase,
+    constant: changeCase.constantCase,
+    dot: changeCase.dotCase,
+    header: changeCase.headerCase,
+    no: changeCase.noCase,
+    path: changeCase.pathCase,
+    snake: changeCase.snakeCase,
+  };
+  return (transformers as any)[type](iconName);
 };

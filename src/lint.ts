@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+
 import { getMdiMetaData } from "./util";
 import { config } from "./configuration";
 import { IIconMeta } from "./types";

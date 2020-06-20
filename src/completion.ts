@@ -1,6 +1,12 @@
 import * as vscode from "vscode";
-import { getMdiMetaData, getIconData, createCompletion } from "./util";
-import { IIconCompletionItem, CompletionType } from "./types";
+
+import {
+  getMdiMetaData,
+  getIconData,
+  matcherStringToRegex,
+  createCompletion,
+} from "./util";
+import { IIconCompletionItem } from "./types";
 import { config } from "./configuration";
 
 export class CompletionProvider implements vscode.CompletionItemProvider {
@@ -11,50 +17,48 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
     let linePrefix = document
       .lineAt(position)
       .text.substr(0, position.character);
-    const match = linePrefix.match(/mdi(-)?(:)?([-\w]+?)?$/);
-    if (!match) {
-      return [];
+
+    for (const matcher of config.matchers) {
+      const regex = matcherStringToRegex(matcher.match);
+      if (!regex) continue;
+      const match = linePrefix.match(regex.suggestionPrefixAndIconRegex);
+      if (!match || !match.groups) {
+        continue;
+      }
+      const meta = await getMdiMetaData();
+      const range = new vscode.Range(
+        position.line,
+        position.character - match.groups.icon.length,
+        position.line,
+        position.character
+      );
+
+      return {
+        incomplete: true,
+        items: meta.reduce<IIconCompletionItem[]>(
+          (prev, cur) =>
+            prev.concat(
+              [cur.name, ...(config.includeAliases ? cur.aliases : [])].map(
+                (name): IIconCompletionItem => ({
+                  label: createCompletion(name, regex.type),
+                  kind: vscode.CompletionItemKind.Text,
+                  sortText: name,
+                  meta: cur,
+                  range,
+                  insertText: createCompletion(cur.name, regex.type),
+                })
+              )
+            ),
+          []
+        ),
+      };
     }
 
-    const completionType = match[1]
-      ? CompletionType.kebabCase
-      : match[2]
-      ? CompletionType.homeAssistant
-      : CompletionType.camelCase;
-
-    const meta = await getMdiMetaData();
-
-    const range = new vscode.Range(
-      position.line,
-      position.character - match[0].length,
-      position.line,
-      position.character
-    );
-
-    return {
-      incomplete: true,
-      items: meta.reduce<IIconCompletionItem[]>(
-        (prev, cur) =>
-          prev.concat(
-            [cur.name, ...(config.includeAliases ? cur.aliases : [])].map(
-              (name): IIconCompletionItem => ({
-                label: createCompletion(name, completionType),
-                kind: vscode.CompletionItemKind.Text,
-                sortText: name,
-                meta: cur,
-                completionType,
-                range,
-              })
-            )
-          ),
-        []
-      ),
-    };
+    return [];
   }
 
   resolveCompletionItem(
-    item: IIconCompletionItem,
-    token: vscode.CancellationToken
+    item: IIconCompletionItem
   ): vscode.ProviderResult<vscode.CompletionItem> {
     return getIconData(item.meta).then((data) => {
       return {
@@ -66,10 +70,6 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
 - author: ${data.author}
 - version: ${data.version}`),
         detail: data.tags,
-        insertText: `${config.prefix}${createCompletion(
-          item.meta.name,
-          item.completionType
-        )}${config.suffix}`,
       };
     });
   }

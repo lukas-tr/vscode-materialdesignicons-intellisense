@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { CompletionType } from "./types";
+
 import { hexToRgbString } from "./util";
 
 const searchCodeActionCode = 1;
@@ -9,6 +9,18 @@ export const config = {
   context: null as vscode.ExtensionContext | null, // TODO: refactor
   get all() {
     return vscode.workspace.getConfiguration("materialdesigniconsIntellisense");
+  },
+  get matchers() {
+    return (
+      config.all.get<
+        Array<{
+          match: string;
+          insert: string;
+          displayName: string;
+          name: string;
+        }>
+      >("matchers") || []
+    );
   },
   get iconSize() {
     return config.all.get<number>("iconSize") || 100;
@@ -32,12 +44,6 @@ export const config = {
   },
   get includeAliases() {
     return config.all.get<boolean>("includeAliases") || false;
-  },
-  get prefix() {
-    return config.all.get<string>("insertPrefix") || "";
-  },
-  get suffix() {
-    return config.all.get<string>("insertSuffix") || "";
   },
   get latestMdiVersion() {
     return config.context?.globalState.get<string>("latestMdiVersion");
@@ -82,10 +88,10 @@ export const config = {
     return searchCodeActionCode;
   },
   get insertType() {
-    return config.all.get<CompletionType>("insertStyle")!;
+    return config.all.get<string>("insertStyle")!;
   },
   lastSearch: "",
-  changeInsertType(newType: CompletionType) {
+  changeInsertType(newType: string) {
     return config.all.update(
       "insertStyle",
       newType,

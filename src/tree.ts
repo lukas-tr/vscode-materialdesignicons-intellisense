@@ -1,12 +1,12 @@
 import * as vscode from "vscode";
-import { TreeNode, IIconMeta, ITagNode } from "./types";
-import * as path from "path";
+import * as __fuse from "fuse.js";
+import _fuse from "fuse.js";
+
+import { TreeNode, IIconMeta, ITagNode, CompletionType } from "./types";
 import { config } from "./configuration";
 import { getMdiMetaData, getIconData, createCompletion } from "./util";
 
-// import Fuse from "fuse.js" doesn't work because of default import, even with allowSyntheticDefaultImports
-import * as __fuse from "fuse.js";
-import _fuse from "fuse.js";
+// import Fuse from "fuse.js" doesn't work, even with allowSyntheticDefaultImports
 const Fuse: typeof _fuse = __fuse as any;
 
 export class IconTreeDataProvider
@@ -34,9 +34,8 @@ export class IconTreeDataProvider
         }
         return {
           contextValue: "mdiIcon",
-          label: createCompletion(element.meta.name),
+          label: createCompletion(element.meta.name, CompletionType.no),
           description: element.search ? element.doc.tags : undefined,
-
           iconPath: vscode.Uri.parse(
             `data:image/svg+xml;utf8,${element.doc.rawIcon}`
           ),
@@ -182,9 +181,6 @@ export class IconTreeDataProvider
           type: "tag",
           tag: element.meta.tags[0] || "Other",
         };
-    // const parent = element.resource.with ({   path:
-    // dirname(element.resource.path) }) ; return parent.path !== '//'   ? {
-    // resource: parent,     isDirectory: true   }   : null;
   }
 
   public provideTextDocumentContent(

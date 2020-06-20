@@ -48,11 +48,16 @@ export type TreeNode = IIconNode | ITagNode | ISearchNode;
 
 export interface IIconCompletionItem extends vscode.CompletionItem {
   meta: IIconMeta;
-  completionType: CompletionType;
 }
 
 export enum CompletionType {
-  kebabCase = "kebabCase",
-  camelCase = "camelCase",
-  homeAssistant = "homeAssistant"
+  camel = "camel",
+  param = "param",
+  pascal = "pascal",
+  constant = "constant",
+  dot = "dot",
+  header = "header",
+  no = "no",
+  path = "path",
+  snake = "snake",
 }
