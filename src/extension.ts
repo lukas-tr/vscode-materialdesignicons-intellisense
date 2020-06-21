@@ -1,11 +1,11 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 
-import { TreeNode, CompletionType } from "./types";
+import { TreeNode } from "./types";
 import { config } from "./configuration";
 import { IconTreeDataProvider } from "./tree";
 import { HoverProvider } from "./hover";
-import { CompletionProvider } from "./completion";
+import { CompletionProvider, triggerCharacters } from "./completion";
 import { IconLint } from "./lint";
 import { showPreview } from "./preview";
 import {
@@ -15,6 +15,7 @@ import {
   log,
   createCompletion,
 } from "./util";
+import { registerDecoration } from "./decoration";
 
 export function activate(context: vscode.ExtensionContext) {
   const treeDataProvider = new IconTreeDataProvider();
@@ -291,7 +292,8 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.languages.registerCompletionItemProvider(
       config.selector,
-      new CompletionProvider()
+      new CompletionProvider(),
+      ...triggerCharacters
     )
   );
 
@@ -385,6 +387,8 @@ export function activate(context: vscode.ExtensionContext) {
       }
     })();
   }
+
+  context.subscriptions.push(...registerDecoration());
 
   log('"materialdesignicons-intellisense" is now active');
 }

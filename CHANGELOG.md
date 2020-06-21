@@ -127,6 +127,8 @@ Initial release of Material Design Icons Intellisense
 
 ## 3.0.0
 
+- Added editor decorations
+- Updated readme
 - Removed settings
   - `materialdesigniconsIntellisense.insertPrefix`
   - `materialdesigniconsIntellisense.insertSuffix`
@@ -134,5 +136,6 @@ Initial release of Material Design Icons Intellisense
   - `materialdesigniconsIntellisense.insertStyle`
 - Added settings
   - `materialdesigniconsIntellisense.matchers`
+  - `materialdesigniconsIntellisense.enableDecorations`
 - Added commands
   - `materialdesigniconsIntellisense.changeSettings`

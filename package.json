@@ -105,7 +105,8 @@
                             "vue",
                             "ng-template",
                             "yaml",
-                            "home-assistant"
+                            "home-assistant",
+                            "dart"
                         ],
                         "items": {
                             "type": "string"
@@ -132,6 +133,11 @@
                         "type": "string",
                         "default": "kebabCase",
                         "markdownDescription": "Insert style for MDI Explorer. Available options in `#materialdesigniconsIntellisense.matchers#`."
+                    },
+                    "materialdesigniconsIntellisense.enableDecorations": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Show icon as editor decoration"
                     },
                     "materialdesigniconsIntellisense.enableLinter": {
                         "type": "boolean",
@@ -191,37 +197,37 @@
                         },
                         "default": [
                             {
-                                "match": "Mdi\\.{camel}",
+                                "match": "\\bMdi\\.{camel}\\b",
                                 "insert": "Icon(Mdi.{camel})",
                                 "displayName": "Flutter (mdi)",
                                 "name": "flutter1"
                             },
                             {
-                                "match": "MdiIcons\\.fromString\\(['\"]{camel}['\"]\\)",
+                                "match": "\\bMdiIcons\\.fromString\\(['\"]{camel}['\"]\\)",
                                 "insert": "MdiIcons.fromString('{camel}')",
                                 "displayName": "Flutter (material_design_icons_flutter, fromString)",
                                 "name": "flutter2"
                             },
                             {
-                                "match": "MdiIcons\\.{camel}",
+                                "match": "\\bMdiIcons\\.{camel}\\b",
                                 "insert": "Icon(MdiIcons.{camel})",
                                 "displayName": "Flutter (material_design_icons_flutter)",
                                 "name": "flutter3"
                             },
                             {
-                                "match": "mdi:{param}",
+                                "match": "\\bmdi:{param}\\b",
                                 "insert": "mdi:{param}",
                                 "displayName": "kebab-case (web font)",
                                 "name": "kebabCase"
                             },
                             {
-                                "match": "mdi{pascal}",
+                                "match": "\\bmdi{pascal}\\b",
                                 "insert": "mdi{pascal}",
                                 "displayName": "camelCase (js)",
                                 "name": "camelCase"
                             },
                             {
-                                "match": "mdi-{param}",
+                                "match": "\\bmdi-{param}\\b",
                                 "insert": "mdi-{param}",
                                 "displayName": "Home Assistant",
                                 "name": "homeAssistant"

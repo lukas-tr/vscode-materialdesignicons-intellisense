@@ -9,6 +9,8 @@ import {
 import { IIconCompletionItem } from "./types";
 import { config } from "./configuration";
 
+export const triggerCharacters = [":", "-", "i", "'", '"', "."];
+
 export class CompletionProvider implements vscode.CompletionItemProvider {
   async provideCompletionItems(
     document: vscode.TextDocument,

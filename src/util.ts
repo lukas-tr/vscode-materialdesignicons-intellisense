@@ -224,7 +224,7 @@ export const matcherStringToRegex = (str: string) => {
     `(?<icon>[${replacement}0-9]${count})`;
   const prefix = result.input.slice(0, result.index);
   return {
-    fullRegex: new RegExp(str.replace(/\{\w+\}/i, createIconRegex("+")), "i"),
+    fullRegex: new RegExp(str.replace(/\{\w+\}/i, createIconRegex("+")), "ig"),
     type,
     suggestionPrefixAndIconRegex: new RegExp(
       `(?<prefix>${prefix})${createIconRegex("*")}$`
@@ -271,4 +271,21 @@ export const createCompletion = (iconName: string, type: CompletionType) => {
     snake: changeCase.snakeCase,
   };
   return (transformers as any)[type](iconName);
+};
+
+export const extractPathFromSvg = (svg: string) => {
+  const reg = /\bd="(.*?)"/g;
+  const match = reg.exec(svg);
+  if (!match) {
+    return "";
+  }
+  return match[1];
+};
+
+export const createDecorationSvg = (path: string): string => {
+  const size = 24;
+  const template = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}"><path transform-origin="${
+    size / 2
+  } ${size / 2}" fill="${config.iconColor}" d="${path}"/></svg>`;
+  return template;
 };

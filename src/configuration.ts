@@ -101,6 +101,9 @@ export const config = {
   get enableLinter() {
     return config.all.get<boolean>("enableLinter");
   },
+  get enableDecorations() {
+    return config.all.get<boolean>("enableDecorations");
+  },
   get ignoredIcons() {
     return config.all.get<string[]>("ignoredIcons") || [];
   },
