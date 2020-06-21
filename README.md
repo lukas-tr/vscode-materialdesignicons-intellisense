@@ -85,7 +85,7 @@ This extension provides intellisense for both `@mdi/font` and `@mdi/js`. Due to 
 
 You can add custom matchers to `materialdesigniconsIntellisense.matchers`. [Create an issue](https://github.com/lukas-tr/vscode-materialdesignicons-intellisense/issues/new) or [add a pull request](https://github.com/lukas-tr/vscode-materialdesignicons-intellisense/pulls) if your matcher should be available to other people.
 
-```json
+```jsonc
 {
     "match": "\\bmdi:{param}\\b", // regex for hover, decoration and completion, possible cases below
     "insert": "mdi:{param}", // insert from explorer
