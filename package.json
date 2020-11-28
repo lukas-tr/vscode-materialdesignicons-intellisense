@@ -2,7 +2,7 @@
     "name": "materialdesignicons-intellisense",
     "displayName": "Material Design Icons Intellisense",
     "description": "Provides intellisense for Material Design Icons",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "engines": {
         "vscode": "^1.38.0"
     },
@@ -204,12 +204,18 @@
                                     "description": "Identifier used for `#materialdesigniconsIntellisense.insertStyle#`"
                                 },
                                 "insertPrefix": {
-                                    "type": ["string", "null"],
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
                                     "default": null,
                                     "description": "String inserted before `match`."
                                 },
                                 "insertSuffix": {
-                                    "type": ["string", "null"],
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
                                     "default": null,
                                     "description": "String inserted after the icon name."
                                 }
