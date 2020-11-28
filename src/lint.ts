@@ -31,8 +31,6 @@ export class IconLint implements vscode.CodeActionProvider {
     if (config.selector.indexOf(document.languageId) === -1) {
       return;
     }
-    const text = document.getText();
-
     const diagnostics: vscode.Diagnostic[] = [];
     let match: RegExpExecArray | null = null;
 
