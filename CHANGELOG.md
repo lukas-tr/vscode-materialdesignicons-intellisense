@@ -143,3 +143,4 @@ Initial release of Material Design Icons Intellisense
 ## 3.1.0
 
 - Added editor decoration size and margin config
+- Added `insertPrefix` and `insertSuffix` for matchers

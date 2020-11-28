@@ -10,25 +10,25 @@ export class HoverProvider implements vscode.HoverProvider {
     }
 
     const meta = await getMdiMetaData();
-    for (const item of meta) {
-      const isIcon = result.iconName === item.name;
-      if (isIcon) {
-        const meta = await getIconData(item);
-        const hover: vscode.Hover = {
-          range: result.range,
-          contents: [
-            meta.icon,
-            meta.tags,
-            `aliases: ${meta.aliases}`,
-            meta.link,
-          ],
-        };
-        return hover;
-      }
+    const icon = meta.find(i => result.iconName === i.name)
+
+    if (!icon) {
+      const hover: vscode.Hover = {
+        range: result.range,
+        contents: [`no preview available for mdi-${result.iconName}`],
+      };
+      return hover;
     }
+
+    const iconData = await getIconData(icon);
     const hover: vscode.Hover = {
       range: result.range,
-      contents: [`no preview available for mdi-${result.iconName}`],
+      contents: [
+        iconData.icon,
+        iconData.tags,
+        `aliases: ${iconData.aliases}`,
+        iconData.link,
+      ],
     };
     return hover;
   }

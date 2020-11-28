@@ -202,6 +202,16 @@
                                 "name": {
                                     "type": "string",
                                     "description": "Identifier used for `#materialdesigniconsIntellisense.insertStyle#`"
+                                },
+                                "insertPrefix": {
+                                    "type": ["string", "null"],
+                                    "default": null,
+                                    "description": "String inserted before `match`."
+                                },
+                                "insertSuffix": {
+                                    "type": ["string", "null"],
+                                    "default": null,
+                                    "description": "String inserted after the icon name."
                                 }
                             }
                         },

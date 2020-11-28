@@ -29,6 +29,7 @@ Provides intellisense, search and hover preview of [Material Design Icons](https
 - `materialdesigniconsIntellisense.iconSize`: Size of the preview icon in pixels.
 - `materialdesigniconsIntellisense.selector`: Languages where completion and hover are active. Languages can be set through the `MDI: Select languages` command.
 - `materialdesigniconsIntellisense.includeAliases`: Also include icon aliases in completion items.
+- `materialdesigniconsIntellisense.matchers`: Customize how icon names are matched and inserted. See [FAQ](#how-to-add-support-for-other-libraries).
 
 ### Hover
 
@@ -92,7 +93,22 @@ You can add custom matchers to `materialdesigniconsIntellisense.matchers`. [Crea
     "match": "\\bmdi:{param}\\b", // regex for hover, decoration and completion, possible cases below
     "insert": "mdi:{param}", // insert from explorer
     "displayName": "kebab-case (web font)", // shown by `materialdesigniconsIntellisense.changeInsertStyle` command
-    "name": "kebabCase" // any string, should be unique
+    "name": "kebabCase", // any string, should be unique
+    "insertPrefix": null, // optional, string inserted before `match`
+    "insertSuffix": null, // optional, string inserted after icon name
+}
+```
+
+You can also add prefixes/suffixes to existing entries. This example would allow you to insert `<i class="mdi-alert"></i>` by typing `mdi-al`<kbd>Enter</kbd>.
+
+```jsonc
+{
+    "match": "\\bmdi-{param}\\b",
+    "insert": "mdi-{param}",
+    "displayName": "kebab-case (web font)",
+    "name": "kebabCase",
+    "insertPrefix": "<i class=\"",
+    "insertSuffix": "\"></i>"
 }
 ```
 

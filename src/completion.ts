@@ -35,6 +35,11 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
         position.character
       );
 
+      const edits: vscode.TextEdit[] = [];
+      if (matcher.insertPrefix) {
+        edits.push(vscode.TextEdit.insert(position.translate(0, - match.length - 1), matcher.insertPrefix))
+      }
+
       return {
         incomplete: true,
         items: meta.reduce<IIconCompletionItem[]>(
@@ -47,7 +52,8 @@ export class CompletionProvider implements vscode.CompletionItemProvider {
                   sortText: name,
                   meta: cur,
                   range,
-                  insertText: createCompletion(cur.name, regex.type),
+                  insertText: `${createCompletion(cur.name, regex.type)}${matcher.insertSuffix || ""}`,
+                  additionalTextEdits: edits,
                 })
               )
             ),

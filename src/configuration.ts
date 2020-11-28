@@ -18,6 +18,8 @@ export const config = {
           insert: string;
           displayName: string;
           name: string;
+          insertPrefix?: string;
+          insertSuffix?: string;
         }>
       >("matchers") || []
     );
