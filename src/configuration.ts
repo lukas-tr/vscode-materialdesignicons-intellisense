@@ -107,4 +107,7 @@ export const config = {
   get ignoredIcons() {
     return config.all.get<string[]>("ignoredIcons") || [];
   },
+  get decoration() {
+    return config.all.get<{ margin: string, size: string }>("decoration")!;
+  }
 };

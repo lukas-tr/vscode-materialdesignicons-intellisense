@@ -139,3 +139,7 @@ Initial release of Material Design Icons Intellisense
   - `materialdesigniconsIntellisense.enableDecorations`
 - Added commands
   - `materialdesigniconsIntellisense.changeSettings`
+
+## 3.1.0
+
+- Added editor decoration size and margin config

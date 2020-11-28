@@ -44,6 +44,8 @@ Provides intellisense, search and hover preview of [Material Design Icons](https
 
 - `materialdesigniconsIntellisense.iconColor`: RGB color of the preview icon.
 - `materialdesigniconsIntellisense.enableDecorations`: Show decorations
+- `materialdesigniconsIntellisense.decoration.size`: Set decoration width and height
+- `materialdesigniconsIntellisense.decoration.margin`: Set decoration margin
 
 ### Explorer
 

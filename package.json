@@ -139,6 +139,16 @@
                         "default": true,
                         "description": "Show icon as editor decoration"
                     },
+                    "materialdesigniconsIntellisense.decoration.size": {
+                        "type": "string",
+                        "default": "1em",
+                        "markdownDescription": "Inline decoration width and height. Accepts [css length units](https://developer.mozilla.org/en-US/docs/Web/CSS/length)"
+                    },
+                    "materialdesigniconsIntellisense.decoration.margin": {
+                        "type": "string",
+                        "default": ".1em .1em .1em .1em",
+                        "markdownDescription": "Inline decoration [margin](https://developer.mozilla.org/en-US/docs/Web/CSS/margin)."
+                    },
                     "materialdesigniconsIntellisense.enableLinter": {
                         "type": "boolean",
                         "default": true,

@@ -17,8 +17,9 @@ export const registerDecoration = () => {
   const iconDecoration = vscode.window.createTextEditorDecorationType({
     rangeBehavior: vscode.DecorationRangeBehavior.ClosedOpen,
     before: {
-      margin: "0 .1em .1em 0",
-      width: "1.1em",
+      margin: config.decoration.margin,
+      height: config.decoration.size,
+      width: config.decoration.size,
     },
   });
 
@@ -31,7 +32,7 @@ export const registerDecoration = () => {
       return;
     }
 
-    const decorationsArr: vscode.DecorationOptions[] = []; // TODO: type
+    const decorationsArr: vscode.DecorationOptions[] = [];
     for (const matcher of config.matchers) {
       const regex = matcherStringToRegex(matcher.match);
       if (!regex) continue;
@@ -107,6 +108,14 @@ export const registerDecoration = () => {
         event.affectsConfiguration("materialdesigniconsIntellisense.iconColor")
       ) {
         triggerUpdateDecorations();
+      }
+      if (
+        event.affectsConfiguration("materialdesigniconsIntellisense.decoration.size") ||
+        event.affectsConfiguration("materialdesigniconsIntellisense.decoration.margin")
+      ) {
+        vscode.window.showInformationMessage(
+          "materialdesigniconsIntellisense.decoration change takes affect after the next restart of code"
+        );
       }
     },
     null,
