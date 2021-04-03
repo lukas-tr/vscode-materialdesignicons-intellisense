@@ -76,9 +76,8 @@ export const config = {
           config.context.globalStoragePath,
           config.mdiVersion,
           "package"
-        )) ||
-      path.normalize(path.join(__dirname, "../node_modules/@mdi/svg/")) // fallback
-    );
+        )) || ""
+    ); // TODO: handle errors (eg mdi package download fail)
   },
   get mdiPackagePath() {
     return path.normalize(path.join(config.mdiPath, "package.json"));

@@ -173,7 +173,7 @@ export const downloadAndExtractTarball = (
   url: string,
   destinationDirectory: string
 ) => {
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     var req = https.get(url, function (res) {
       const t = tar.extract({
         cwd: destinationDirectory,
