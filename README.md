@@ -23,7 +23,7 @@ Provides intellisense, search and hover preview of [Material Design Icons](https
 
 ### Intellisense
 
-![Intellisense](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/completion.png)
+![Intellisense](./doc/completion.png)
 
 - `materialdesigniconsIntellisense.iconColor`: RGB color of the preview icon.
 - `materialdesigniconsIntellisense.iconSize`: Size of the preview icon in pixels.
@@ -33,7 +33,7 @@ Provides intellisense, search and hover preview of [Material Design Icons](https
 
 ### Hover
 
-![Hover](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/hover.png)
+![Hover](./doc/hover.png)
 
 - `materialdesigniconsIntellisense.iconColor`: RGB color of the preview icon.
 - `materialdesigniconsIntellisense.iconSize`: Size of the preview icon in pixels.
@@ -41,7 +41,7 @@ Provides intellisense, search and hover preview of [Material Design Icons](https
 
 ### Decoration
 
-![Decoration](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/decoration.png)
+![Decoration](./doc/decoration.png)
 
 - `materialdesigniconsIntellisense.iconColor`: RGB color of the preview icon.
 - `materialdesigniconsIntellisense.enableDecorations`: Show decorations
@@ -50,25 +50,25 @@ Provides intellisense, search and hover preview of [Material Design Icons](https
 
 ### Explorer
 
-![Explorer](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/explorer.gif)
+![Explorer](./doc/explorer.gif)
 
 - `materialdesigniconsIntellisense.iconColor`: RGB color of the preview icon.
 - `materialdesigniconsIntellisense.insertStyle`: Switch between kebab case, camel case and Home Assistant syntax.
 
 ### Configuration
 
-![Configuration](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/configuration.gif)
+![Configuration](./doc/configuration.gif)
 
 - `materialdesigniconsIntellisense.mdiVersion`: `@mdi/svg` version to use. This can either be `latest` or a specific version like `5.2.45`.
 - `materialdesigniconsIntellisense.overrideFontPackagePath`: (not recommended, use `mdiVersion` instead) Override the path to the `@mdi/svg` package. To use a global installation, set this to `<global npm root>/@mdi/svg` where `<global npm root>` is the output of `npm root -g`
 
 ### Search
 
-![Search](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/search.gif)
+![Search](./doc/search.gif)
 
 ### Lint
 
-![Lint](https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/doc/usage-4.gif)
+![Lint](./doc/usage-4.gif)
 
 - `materialdesigniconsIntellisense.enableLinter`: Lint Home Assistant and kebab case icon names
 - `materialdesigniconsIntellisense.ignoredIcons`: Icons ignored by the linter
