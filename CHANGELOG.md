@@ -151,3 +151,9 @@ Initial release of Material Design Icons Intellisense
 - Changed logo
 - Update deps
 - Fix type error
+
+## 3.3.0
+
+- Fix custom view not being initialized properly
+- Change activation event
+- Update dependencies

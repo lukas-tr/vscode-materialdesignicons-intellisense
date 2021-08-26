@@ -19,8 +19,10 @@ export class IconTreeDataProvider
   readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData
     .event;
 
+  private getChildrenCalled = 0;
+
   public refresh() {
-    this._onDidChangeTreeData.fire();
+    this._onDidChangeTreeData.fire(null);
   }
 
   public getTreeItem(element: TreeNode): vscode.TreeItem {
@@ -170,6 +172,11 @@ export class IconTreeDataProvider
       if (config.lastSearch) {
         children.unshift(searchResult);
       }
+      if(!this.getChildrenCalled) {
+        // the view doesn't seem to update the first time `getChildren` gets called; might be a bug in vscode or a change in the api
+        this.refresh();
+      }
+      this.getChildrenCalled++;
       return children;
     });
   }

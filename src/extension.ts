@@ -26,11 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
     treeDataProvider,
   });
 
-  treeView.onDidChangeVisibility((event) => {
-    if (event.visible) {
-      treeDataProvider.refresh();
-    }
-  });
+  treeView.onDidChangeVisibility((event) => (event.visible) && treeDataProvider.refresh());
 
   vscode.commands.registerCommand(
     "materialdesigniconsIntellisense.openIconPreview",
@@ -201,13 +197,17 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand(
       "materialdesigniconsIntellisense.changeInsertStyle",
       async () => {
-        const items = config.matchers.map((m): vscode.QuickPickItem & {
-          name: string;
-        } => ({
-          label: m.displayName,
-          description: m.name === config.insertType ? "selected" : "",
-          name: m.name,
-        }));
+        const items = config.matchers.map(
+          (
+            m
+          ): vscode.QuickPickItem & {
+            name: string;
+          } => ({
+            label: m.displayName,
+            description: m.name === config.insertType ? "selected" : "",
+            name: m.name,
+          })
+        );
         const result = await vscode.window.showQuickPick(items, {
           canPickMany: false,
         });
