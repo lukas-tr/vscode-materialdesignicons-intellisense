@@ -1,5 +1,5 @@
 import { MarkdownString } from "vscode";
-import { IMeta } from "./IconManager";
+import { IMeta } from "./IconSet";
 
 export class Icon {
   constructor(private meta: IMeta, private path: string) {}
