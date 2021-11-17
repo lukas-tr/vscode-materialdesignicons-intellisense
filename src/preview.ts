@@ -1,12 +1,16 @@
 import * as vscode from "vscode";
-
-import { TreeNode } from "./types";
+import { Configuration } from "./Configuration";
+import { TreeNode } from "./tree";
 
 let currentPreviewPanel: vscode.WebviewPanel | undefined = undefined;
 
+const createTitle = (name: string) => 
+      `${name} - Material Design Icon Preview`
+
 export const showPreview = (
   node: TreeNode,
-  context: vscode.ExtensionContext
+  context: vscode.ExtensionContext,
+  config: Configuration,
 ) => {
   if (node.type === "tag" || node.type === "other") {
     return;
@@ -18,10 +22,11 @@ export const showPreview = (
 
   if (currentPreviewPanel) {
     currentPreviewPanel.reveal(columnToShowIn);
+    currentPreviewPanel.title = createTitle(node.icon.name)
   } else {
     currentPreviewPanel = vscode.window.createWebviewPanel(
       "mdiIconPreview",
-      `${node.doc.name} - Material Design Icon Preview`,
+      createTitle(node.icon.name),
       columnToShowIn,
       { enableScripts: false }
     );
@@ -59,7 +64,7 @@ export const showPreview = (
           </style>
       </head>
       <body>
-          ${node.doc.rawIcon}
+          ${node.icon.getRawSvgIcon(config.iconColor)}
       </body>
       </html>`;
 };

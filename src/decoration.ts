@@ -1,60 +1,120 @@
 import * as vscode from "vscode";
-import {
-  matcherStringToRegex,
-  getMdiMetaData,
-  getIconData,
-  createDecorationSvg,
-  extractPathFromSvg,
-} from "./util";
+import { matcherStringToRegex } from "./util";
 import { paramCase } from "change-case";
-import { config } from "./configuration";
+import { Configuration } from "./Configuration";
+import { IconManager } from "./IconManager";
 
-export const registerDecoration = () => {
-  const subscriptions: vscode.Disposable[] = [];
-  let timeout: NodeJS.Timer | undefined = undefined;
-  let activeEditor = vscode.window.activeTextEditor;
+export class DecorationProvider {
+  private iconDecoration: vscode.TextEditorDecorationType;
+  private timeout: NodeJS.Timer | undefined = undefined;
+  private activeEditor = vscode.window.activeTextEditor;
 
-  const iconDecoration = vscode.window.createTextEditorDecorationType({
-    rangeBehavior: vscode.DecorationRangeBehavior.ClosedOpen,
-    before: {
-      margin: config.decoration.margin,
-      height: config.decoration.size,
-      width: config.decoration.size,
-    },
-  });
+  constructor(private config: Configuration, private manager: IconManager) {
+    this.iconDecoration = vscode.window.createTextEditorDecorationType({
+      rangeBehavior: vscode.DecorationRangeBehavior.ClosedOpen,
+      before: {
+        margin: this.config.decoration.margin,
+        height: this.config.decoration.size,
+        width: this.config.decoration.size,
+      },
+    });
+  }
 
-  async function updateDecorations() {
-    if (!activeEditor) {
+  register() {
+    this.activeEditor = vscode.window.activeTextEditor;
+    const subscriptions: vscode.Disposable[] = [];
+    if (this.activeEditor) {
+      this.triggerUpdateDecorations();
+    }
+
+    vscode.window.onDidChangeActiveTextEditor(
+      (editor) => {
+        this.activeEditor = editor;
+        if (editor) {
+          this.triggerUpdateDecorations();
+        }
+      },
+      null,
+      subscriptions
+    );
+
+    vscode.workspace.onDidChangeTextDocument(
+      (event) => {
+        if (
+          this.activeEditor &&
+          event.document === this.activeEditor.document
+        ) {
+          this.triggerUpdateDecorations();
+        }
+      },
+      null,
+      subscriptions
+    );
+
+    vscode.workspace.onDidChangeConfiguration(
+      (event) => {
+        if (
+          event.affectsConfiguration(
+            "materialdesigniconsIntellisense.enableDecorations"
+          ) ||
+          event.affectsConfiguration(
+            "materialdesigniconsIntellisense.iconColor"
+          )
+        ) {
+          this.triggerUpdateDecorations();
+        }
+        if (
+          event.affectsConfiguration(
+            "materialdesigniconsIntellisense.decoration.size"
+          ) ||
+          event.affectsConfiguration(
+            "materialdesigniconsIntellisense.decoration.margin"
+          )
+        ) {
+          vscode.window.showInformationMessage(
+            "materialdesigniconsIntellisense.decoration change takes affect after the next restart of code"
+          );
+        }
+      },
+      null,
+      subscriptions
+    );
+
+    return subscriptions;
+  }
+
+  private async updateDecorations() {
+    if (!this.activeEditor) {
       return;
     }
-    if (!config.enableDecorations) {
-      activeEditor.setDecorations(iconDecoration, []); // clear existing decorations
+    if (!this.config.enableDecorations) {
+      this.activeEditor.setDecorations(this.iconDecoration, []); // clear existing decorations
       return;
     }
 
     const decorationsArr: vscode.DecorationOptions[] = [];
-    for (const matcher of config.matchers) {
+    for (const matcher of this.config.matchers) {
       const regex = matcherStringToRegex(matcher.match);
       if (!regex) continue;
       const regEx = regex.fullRegex;
-      const text = activeEditor.document.getText();
+      const text = this.activeEditor.document.getText();
       let match: RegExpExecArray;
       while ((match = regEx.exec(text)!)) {
-        const meta = await getMdiMetaData();
         const paramItemName = paramCase(match?.groups?.icon || "");
-        const item = meta.find((i) => paramItemName === i.name);
+        const item = await this.manager.getIcon(paramItemName);
         if (item) {
-          const meta = await getIconData(item);
           decorationsArr.push({
             range: new vscode.Range(
-              activeEditor.document.positionAt(match.index),
-              activeEditor.document.positionAt(match.index + match[0].length)
+              this.activeEditor.document.positionAt(match.index),
+              this.activeEditor.document.positionAt(
+                match.index + match[0].length
+              )
             ),
             renderOptions: {
               before: {
                 contentIconPath: vscode.Uri.parse(
                   `data:image/svg+xml;utf8,${encodeURI(
-                    createDecorationSvg(extractPathFromSvg(meta.rawIcon))
+                    item.getDecorationIcon(this.config.iconColor)
                   )}`
                 ),
               },
@@ -63,64 +123,14 @@ export const registerDecoration = () => {
         }
       }
     }
-    activeEditor.setDecorations(iconDecoration, decorationsArr);
+    this.activeEditor.setDecorations(this.iconDecoration, decorationsArr);
   }
 
-  function triggerUpdateDecorations() {
-    if (timeout) {
-      clearTimeout(timeout);
-      timeout = undefined;
+  triggerUpdateDecorations() {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      this.timeout = undefined;
     }
-    timeout = setTimeout(updateDecorations, 500);
+    this.timeout = setTimeout(() => this.updateDecorations(), 500);
   }
-
-  if (activeEditor) {
-    triggerUpdateDecorations();
-  }
-
-  vscode.window.onDidChangeActiveTextEditor(
-    (editor) => {
-      activeEditor = editor;
-      if (editor) {
-        triggerUpdateDecorations();
-      }
-    },
-    null,
-    subscriptions
-  );
-
-  vscode.workspace.onDidChangeTextDocument(
-    (event) => {
-      if (activeEditor && event.document === activeEditor.document) {
-        triggerUpdateDecorations();
-      }
-    },
-    null,
-    subscriptions
-  );
-
-  vscode.workspace.onDidChangeConfiguration(
-    (event) => {
-      if (
-        event.affectsConfiguration(
-          "materialdesigniconsIntellisense.enableDecorations"
-        ) ||
-        event.affectsConfiguration("materialdesigniconsIntellisense.iconColor")
-      ) {
-        triggerUpdateDecorations();
-      }
-      if (
-        event.affectsConfiguration("materialdesigniconsIntellisense.decoration.size") ||
-        event.affectsConfiguration("materialdesigniconsIntellisense.decoration.margin")
-      ) {
-        vscode.window.showInformationMessage(
-          "materialdesigniconsIntellisense.decoration change takes affect after the next restart of code"
-        );
-      }
-    },
-    null,
-    subscriptions
-  );
-
-  return subscriptions;
-};
+}

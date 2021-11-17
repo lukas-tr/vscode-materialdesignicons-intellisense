@@ -157,3 +157,11 @@ Initial release of Material Design Icons Intellisense
 - Fix custom view not being initialized properly
 - Change activation event
 - Update dependencies
+
+## 4.0.0
+
+- Speed up startup and icon lookup times by changing how paths are stored [#18](https://github.com/lukas-tr/vscode-materialdesignicons-intellisense/issues/18)
+- Remove `materialdesigniconsIntellisense.overrideFontPackagePath` - no longer supported since all icons are now stored in a single json file
+- Remove command `materialdesigniconsIntellisense.showMdiVersion`
+- Add `materialdesigniconsIntellisense.linter.ignorePaths` [#23](https://github.com/lukas-tr/vscode-materialdesignicons-intellisense/issues/23)
+- Add `materialdesigniconsIntellisense.light` [#22](https://github.com/lukas-tr/vscode-materialdesignicons-intellisense/issues/22)

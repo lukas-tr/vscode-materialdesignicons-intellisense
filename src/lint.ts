@@ -1,18 +1,26 @@
 import * as vscode from "vscode";
 
-import { getMdiMetaData } from "./util";
-import { config } from "./configuration";
-import { IIconMeta } from "./types";
+import * as pm from "picomatch"
+import { Configuration } from "./Configuration";
+import { IconManager } from "./IconManager";
+
+
+const searchCodeActionCode = 1;
 
 export class IconLint implements vscode.CodeActionProvider {
-  static lintIconRegex = /\bmdi(-|:)((\w|\-)+)\b/gi;
+  private static LINT_REGULAR_REGEX = /\bmdi(-|:)((\w|\-)+)\b/gi;
+  private static LINT_LIGHT_REGEX = /\bmdil(-|:)((\w|\-)+)\b/gi;
 
   diagnosticCollection: vscode.DiagnosticCollection;
 
-  constructor() {
+  constructor(private config: Configuration, private manager: IconManager) {
     this.lintDocument = this.lintDocument.bind(this);
 
     this.diagnosticCollection = vscode.languages.createDiagnosticCollection();
+  }
+
+  private getRegex(){
+    return this.config.light ? IconLint.LINT_LIGHT_REGEX : IconLint.LINT_REGULAR_REGEX;
   }
 
   dispose() {
@@ -28,27 +36,33 @@ export class IconLint implements vscode.CodeActionProvider {
   }
 
   async lintDocument(document: vscode.TextDocument) {
-    if (config.selector.indexOf(document.languageId) === -1) {
+    if (this.config.selector.indexOf(document.languageId) === -1) {
       return;
     }
+    const ignore = pm(this.config.linter.ignorePaths);
+    const curPath = vscode.workspace.asRelativePath(document.fileName)
+    if(ignore(curPath)) {
+      this.diagnosticCollection.set(document.uri, []);
+      return;
+    }
+
     const diagnostics: vscode.Diagnostic[] = [];
     let match: RegExpExecArray | null = null;
 
-    const meta = await getMdiMetaData();
-
     for (let i = 0; i < document.lineCount; i++) {
       const line = document.lineAt(i);
-      while ((match = IconLint.lintIconRegex.exec(line.text))) {
+      while ((match = this.getRegex().exec(line.text))) {
         const index = match.index;
         const length = match[0].length;
         const iconName = match[2];
 
-        if (config.ignoredIcons.includes(match[0])) {
+        if (this.config.ignoredIcons.includes(match[0])) {
           continue;
         }
 
-        if (this.iconExists(meta, iconName)) {
-          continue;
+        if (await this.manager.getIcon(iconName)) {
+          // icon exists, nothing to complain about
+          continue; 
         }
 
         const range = new vscode.Range(
@@ -63,7 +77,7 @@ export class IconLint implements vscode.CodeActionProvider {
           `MDI: Icon mdi-${iconName} not found`,
           vscode.DiagnosticSeverity.Information
         );
-        diagnostic.code = config.searchCodeActionCode;
+        diagnostic.code = searchCodeActionCode;
 
         diagnostics.push(diagnostic);
       }
@@ -71,15 +85,6 @@ export class IconLint implements vscode.CodeActionProvider {
     if (this.diagnosticCollection) {
       this.diagnosticCollection.set(document.uri, diagnostics);
     }
-  }
-
-  iconExists(meta: IIconMeta[], iconName: string) {
-    for (const item of meta) {
-      if (iconName === item.name) {
-        return true;
-      }
-    }
-    return false;
   }
 
   provideCodeActions(
@@ -90,10 +95,10 @@ export class IconLint implements vscode.CodeActionProvider {
   ): vscode.ProviderResult<(vscode.Command | vscode.CodeAction)[]> {
     const diagnostics = context.diagnostics;
     return diagnostics
-      .filter(d => d.code === config.searchCodeActionCode)
+      .filter(d => d.code === searchCodeActionCode)
       .map(
         (d): vscode.Command => {
-          const match = IconLint.lintIconRegex.exec(d.message);
+          const match = this.getRegex().exec(d.message);
           const iconName = (match && match[2]) || "";
           return {
             title: "Search icon",

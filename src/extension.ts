@@ -1,32 +1,29 @@
 import * as vscode from "vscode";
-import * as fs from "fs";
-
-import { TreeNode } from "./types";
-import { config } from "./configuration";
-import { IconTreeDataProvider } from "./tree";
+import { Configuration } from "./Configuration";
+import { IconTreeDataProvider, TreeNode } from "./tree";
 import { HoverProvider } from "./hover";
 import { CompletionProvider, triggerCharacters } from "./completion";
 import { IconLint } from "./lint";
 import { showPreview } from "./preview";
-import {
-  handleDownload,
-  getVersions,
-  IVersionInfo,
-  log,
-  createCompletion,
-} from "./util";
-import { registerDecoration } from "./decoration";
+import { log, createCompletion } from "./util";
+import { IconManager } from "./IconManager";
+import { DecorationProvider } from "./decoration";
+import { IVersionInfo } from "./IconSet";
+import { VersionNotFoundError } from "./errors";
 
 export function activate(context: vscode.ExtensionContext) {
-  const treeDataProvider = new IconTreeDataProvider();
+  const config = new Configuration(context);
+  const iconManager = new IconManager(config);
 
-  config.context = context;
+  const treeDataProvider = new IconTreeDataProvider(config, iconManager);
 
   const treeView = vscode.window.createTreeView("materialDesignIconsExplorer", {
     treeDataProvider,
   });
 
-  treeView.onDidChangeVisibility((event) => (event.visible) && treeDataProvider.refresh());
+  treeView.onDidChangeVisibility(
+    (event) => event.visible && treeDataProvider.refresh()
+  );
 
   vscode.commands.registerCommand(
     "materialdesigniconsIntellisense.openIconPreview",
@@ -36,25 +33,8 @@ export function activate(context: vscode.ExtensionContext) {
           "Click on an icon in the MDI Explorer view to preview icons"
         );
       }
-      showPreview(node, context);
+      showPreview(node, context, config);
     }
-  );
-
-  context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "materialdesigniconsIntellisense.showMdiVersion",
-      async () => {
-        try {
-          const data = await fs.promises.readFile(config.mdiPackagePath);
-          vscode.window.showInformationMessage(
-            "materialdesignicons-intellisense uses @mdi/svg@" +
-              JSON.parse(data.toString("utf8"))["version"]
-          );
-        } catch (err) {
-          vscode.window.showErrorMessage(err.message);
-        }
-      }
-    )
   );
 
   vscode.commands.registerCommand(
@@ -75,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
           const snippet = match.insert.replace(
             /\{(\w+)\}/,
             (group0, group1) => {
-              return createCompletion(node.doc.name, group1);
+              return createCompletion(node.icon.name, group1);
             }
           );
           await editor.insertSnippet(new vscode.SnippetString(snippet));
@@ -152,7 +132,7 @@ export function activate(context: vscode.ExtensionContext) {
               message: "Getting versions from registry.npmjs.org",
             });
             try {
-              info = await getVersions();
+              info = await iconManager.getAvailableVersions();
               await config.updateLatestMdiVersion(info.latest);
               items = [
                 {
@@ -168,7 +148,7 @@ export function activate(context: vscode.ExtensionContext) {
                     (v.version === config.rawMdiVersion ? " - selected" : ""),
                 })),
               ];
-            } catch (error) {
+            } catch (error: any) {
               log(error);
               vscode.window.showErrorMessage(error.message);
             }
@@ -185,7 +165,25 @@ export function activate(context: vscode.ExtensionContext) {
           const selectedVersion = result.label;
           const versionToDownload =
             selectedVersion === "latest" ? info!.latest : selectedVersion;
-          await handleDownload(versionToDownload, info!);
+
+          await vscode.window.withProgress(
+            {
+              location: vscode.ProgressLocation.Notification,
+              cancellable: false,
+            },
+            async (progress) => {
+              progress.report({
+                message: `Downloading and extracting version ${versionToDownload}`,
+              });
+              const versionInfo = info!.versions.find(
+                (v) => v.version === versionToDownload
+              );
+              if (!versionInfo) {
+                throw new Error(`Version ${versionToDownload} not found`);
+              }
+              iconManager.getIconList(versionToDownload);
+            }
+          );
           await config.updateMdiVersion(selectedVersion);
           treeDataProvider.refresh();
         }
@@ -286,19 +284,22 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.languages.registerHoverProvider(config.selector, new HoverProvider())
+    vscode.languages.registerHoverProvider(
+      config.selector,
+      new HoverProvider(config, iconManager)
+    )
   );
 
   context.subscriptions.push(
     vscode.languages.registerCompletionItemProvider(
       config.selector,
-      new CompletionProvider(),
+      new CompletionProvider(config, iconManager),
       ...triggerCharacters
     )
   );
 
   const enableLinter = () => {
-    const linter = new IconLint();
+    const linter = new IconLint(config, iconManager);
 
     if (vscode.window.activeTextEditor) {
       linter.lintDocument(vscode.window.activeTextEditor.document);
@@ -353,7 +354,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.workspace.onDidChangeConfiguration((event) => {
+    vscode.workspace.onDidChangeConfiguration(async (event) => {
       if (
         event.affectsConfiguration("materialdesigniconsIntellisense.selector")
       ) {
@@ -362,11 +363,22 @@ export function activate(context: vscode.ExtensionContext) {
         );
       }
       if (
-        event.affectsConfiguration(
-          "materialdesigniconsIntellisense.overrideFontPackagePath"
-        ) ||
         event.affectsConfiguration("materialdesigniconsIntellisense.mdiVersion")
       ) {
+        treeDataProvider.refresh();
+      }
+      if (event.affectsConfiguration("materialdesigniconsIntellisense.light")) {
+        try {
+          await iconManager.getIconList();
+        } catch (error: any) {
+          if (error instanceof VersionNotFoundError) {
+            await config.updateMdiVersion("latest");
+            await config.updateLatestMdiVersion(undefined);
+            const versions = await iconManager.getAvailableVersions();
+            await config.updateLatestMdiVersion(versions.latest);
+            await iconManager.getIconList();
+          }
+        }
         treeDataProvider.refresh();
       }
     })
@@ -376,10 +388,9 @@ export function activate(context: vscode.ExtensionContext) {
   if (config.rawMdiVersion === "latest") {
     (async () => {
       try {
-        const info = await getVersions();
-        if (config.mdiVersion !== info.latest) {
-          await handleDownload(info.latest, info);
-          await config.updateLatestMdiVersion(info.latest);
+        const versions = await iconManager.getAvailableVersions();
+        if (config.mdiVersion !== versions.latest) {
+          await config.updateLatestMdiVersion(versions.latest);
           treeDataProvider.refresh();
         }
       } catch (error) {
@@ -388,7 +399,8 @@ export function activate(context: vscode.ExtensionContext) {
     })();
   }
 
-  context.subscriptions.push(...registerDecoration());
+  const decorations = new DecorationProvider(config, iconManager);
+  context.subscriptions.push(...decorations.register());
 
   log('"materialdesignicons-intellisense" is now active');
 }

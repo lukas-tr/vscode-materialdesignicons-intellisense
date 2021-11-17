@@ -4,7 +4,7 @@
     "description": "Provides intellisense for Material Design Icons",
     "version": "3.3.0",
     "engines": {
-        "vscode": "^1.59.0"
+        "vscode": "^1.62.0"
     },
     "categories": [
         "Other"
@@ -120,15 +120,15 @@
                         "default": true,
                         "description": "Also include icon aliases in completion items"
                     },
-                    "materialdesigniconsIntellisense.overrideFontPackagePath": {
-                        "type": "string",
-                        "default": "",
-                        "markdownDescription": "Use `#materialdesigniconsIntellisense.mdiVersion#` if possible. Overwrite the path to the `@mdi/svg` package. To use a global installation, set this to `<global npm root>/@mdi/svg` where `<global npm root>` is the output of `npm root -g`"
-                    },
                     "materialdesigniconsIntellisense.mdiVersion": {
                         "type": "string",
                         "default": "latest",
-                        "markdownDescription": "`@mdi/svg` version to use. This can either be `latest` or a specific version like `5.2.45`. `#materialdesigniconsIntellisense.overrideFontPackagePath#` will overwrite this setting."
+                        "markdownDescription": "`@mdi/svg` version to use. This can either be `latest` or a specific version like `5.2.45`."
+                    },
+                    "materialdesigniconsIntellisense.light": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Use `@mdi/light-svg` instead of `@mdi/svg`"
                     },
                     "materialdesigniconsIntellisense.insertStyle": {
                         "type": "string",
@@ -155,6 +155,15 @@
                         "default": true,
                         "description": "Lint Home Assistant and kebab case icon names"
                     },
+                    "materialdesigniconsIntellisense.linter.ignorePaths": {
+                        "type": "array",
+                        "default": [],
+                        "items": {
+                            "type": "string"
+                        },
+                        "uniqueItems": true,
+                        "markdownDescription": "Directories ignored by the linter. Can be a glob pattern (relative to workspace root): \n- `\"output/**\"` - ignore all files in the output folder\n- `\"config.yaml\"` - ignore contents of a single file."
+                    },
                     "materialdesigniconsIntellisense.ignoredIcons": {
                         "type": "array",
                         "default": [
@@ -174,7 +183,24 @@
                             "mdi-spin",
                             "mdi-light",
                             "mdi-dark",
-                            "mdi-inactive"
+                            "mdi-inactive",
+                            "mdil-18px",
+                            "mdil-24px",
+                            "mdil-36px",
+                            "mdil-48px",
+                            "mdil-rotate-45",
+                            "mdil-rotate-90",
+                            "mdil-rotate-135",
+                            "mdil-rotate-180",
+                            "mdil-rotate-225",
+                            "mdil-rotate-270",
+                            "mdil-rotate-315",
+                            "mdil-flip-h",
+                            "mdil-flip-v",
+                            "mdil-spin",
+                            "mdil-light",
+                            "mdil-dark",
+                            "mdil-inactive"
                         ],
                         "items": {
                             "type": "string"
@@ -219,6 +245,14 @@
                                     ],
                                     "default": null,
                                     "description": "String inserted after the icon name."
+                                },
+                                "light": {
+                                    "type": [
+                                        "boolean",
+                                        "null"
+                                    ],
+                                    "default": null,
+                                    "description": "This matcher is only active for `@mdi/light-svg`"
                                 }
                             }
                         },
@@ -258,6 +292,20 @@
                                 "insert": "mdi:{param}",
                                 "displayName": "Home Assistant",
                                 "name": "homeAssistant"
+                            },
+                            {
+                                "match": "\\bmdil-{param}\\b",
+                                "insert": "mdil-{param}",
+                                "displayName": "kebab-case (web font)",
+                                "name": "kebabCaseLight",
+                                "light": true
+                            },
+                            {
+                                "match": "\\bmdi-light-{param}\\b",
+                                "insert": "i-mdi-light-{param}",
+                                "displayName": "Icones",
+                                "name": "kebabCaseIcones",
+                                "light": true
                             }
                         ],
                         "markdownDescription": "See https://github.com/lukas-tr/vscode-materialdesignicons-intellisense#faq"
@@ -266,11 +314,6 @@
             }
         ],
         "commands": [
-            {
-                "command": "materialdesigniconsIntellisense.showMdiVersion",
-                "title": "Show MDI version",
-                "category": "MDI"
-            },
             {
                 "command": "materialdesigniconsIntellisense.openIconPreview",
                 "when": "false",
@@ -347,16 +390,19 @@
     },
     "devDependencies": {
         "@types/mocha": "^9.0.0",
-        "@types/node": "^16.7.2",
-        "@types/semver": "^7.3.8",
-        "@types/tar": "^4.0.5",
+        "@types/node": "^16.11.7",
+        "@types/semver": "^7.3.9",
+        "@types/tar": "^6.1.0",
         "tslint": "^6.1.3",
-        "typescript": "^4.3.5",
+        "typescript": "^4.4.4",
         "vscode": "^1.1.37"
     },
     "dependencies": {
+        "@types/picomatch": "^2.3.0",
+        "axios": "^0.24.0",
         "change-case": "^4.1.2",
         "fuse.js": "^6.4.6",
+        "picomatch": "^2.3.0",
         "semver": "^7.3.5",
         "tar": "^6.1.11"
     }

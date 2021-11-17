@@ -60,7 +60,6 @@ Provides intellisense, search and hover preview of [Material Design Icons](https
 ![Configuration](./doc/configuration.gif)
 
 - `materialdesigniconsIntellisense.mdiVersion`: `@mdi/svg` version to use. This can either be `latest` or a specific version like `5.2.45`.
-- `materialdesigniconsIntellisense.overrideFontPackagePath`: (not recommended, use `mdiVersion` instead) Override the path to the `@mdi/svg` package. To use a global installation, set this to `<global npm root>/@mdi/svg` where `<global npm root>` is the output of `npm root -g`
 
 ### Search
 
@@ -72,6 +71,15 @@ Provides intellisense, search and hover preview of [Material Design Icons](https
 
 - `materialdesigniconsIntellisense.enableLinter`: Lint Home Assistant and kebab case icon names
 - `materialdesigniconsIntellisense.ignoredIcons`: Icons ignored by the linter
+- `materialdesigniconsIntellisense.linter.ignorePaths`: Paths ignored by linter (glob)
+
+### Supported Icon Sets
+
+* [Material Design Icons](https://github.com/Templarian/MaterialDesign)
+* [Material Design Icons Light](https://github.com/Templarian/MaterialDesignLight)
+
+
+- `materialdesigniconsIntellisense.light`: Use Material Design Icons Light instead of Material Design Icons 
 
 ## FAQ
 

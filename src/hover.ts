@@ -1,16 +1,19 @@
 import * as vscode from "vscode";
+import { Configuration } from "./Configuration";
+import { IconManager } from "./IconManager";
 
-import { getMdiMetaData, getIconData, getMatchAtPosition } from "./util";
+import { getMatchAtPosition } from "./util";
 
 export class HoverProvider implements vscode.HoverProvider {
+  constructor(private config: Configuration, private manager: IconManager) {}
+
   async provideHover(document: vscode.TextDocument, position: vscode.Position) {
-    const result = getMatchAtPosition(document, position);
+    const result = getMatchAtPosition(document, position, this.config.matchers);
     if (!result) {
       return;
     }
 
-    const meta = await getMdiMetaData();
-    const icon = meta.find(i => result.iconName === i.name)
+    const icon = await this.manager.getIcon(result.iconName);
 
     if (!icon) {
       const hover: vscode.Hover = {
@@ -20,14 +23,16 @@ export class HoverProvider implements vscode.HoverProvider {
       return hover;
     }
 
-    const iconData = await getIconData(icon);
     const hover: vscode.Hover = {
       range: result.range,
       contents: [
-        iconData.icon,
-        iconData.tags,
-        `aliases: ${iconData.aliases}`,
-        iconData.link,
+        icon.getMarkdownPreviewIcon(
+          this.config.iconColor,
+          this.config.iconSize
+        ),
+        icon.tags.join(", "),
+        `aliases: ${icon.aliases.join(", ")}`,
+        icon.docLink,
       ],
     };
     return hover;
