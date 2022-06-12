@@ -10,6 +10,7 @@
 </p>
 
 Provides intellisense, search and hover preview of [Material Design Icons](https://materialdesignicons.com/).
+Also available on [Open VSX](https://open-vsx.org/extension/lukas-tr/materialdesignicons-intellisense).
 
 ## Features
 

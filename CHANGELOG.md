@@ -165,3 +165,8 @@ Initial release of Material Design Icons Intellisense
 - Remove command `materialdesigniconsIntellisense.showMdiVersion`
 - Add `materialdesigniconsIntellisense.linter.ignorePaths` [#23](https://github.com/lukas-tr/vscode-materialdesignicons-intellisense/issues/23)
 - Add `materialdesigniconsIntellisense.light` [#22](https://github.com/lukas-tr/vscode-materialdesignicons-intellisense/issues/22)
+
+# 4.1.0
+
+- Update dependencies
+- Disable linter by default (was causing delay sometimes)
