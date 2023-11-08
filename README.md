@@ -4,6 +4,10 @@
 ![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/lukas-tr.materialdesignicons-intellisense?style=flat-square)
 ![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/lukas-tr.materialdesignicons-intellisense?style=flat-square)
 
+
+> [!NOTE]
+> While I will still fix bugs and merge pull requests, I will no longer actively improve this extension as I have switched to a different editor.
+
 <p align="center">
   <br />
   <a title="Install from VSCode Marketplace" href="https://marketplace.visualstudio.com/items?itemName=lukas-tr.materialdesignicons-intellisense"><img src="https://raw.githubusercontent.com/lukas-tr/vscode-materialdesignicons-intellisense/master/icons/logo.png" alt="Logo" /></a>
